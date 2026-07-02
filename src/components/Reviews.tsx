@@ -80,9 +80,6 @@ export default function Reviews() {
                 <h4 className="text-xs md:text-sm font-serif font-bold text-white-soft">
                   {review.author}
                 </h4>
-                <span className="text-[10px] text-muted-text font-sans">
-                  {review.date}
-                </span>
               </div>
 
               {/* Stars */}
@@ -99,18 +96,6 @@ export default function Reviews() {
             </div>
           ))}
         </motion.div>
-      </div>
-
-      {/* Actions */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 mt-12 flex justify-start">
-        <Button
-          variant="secondary"
-          onClick={() => {
-            window.open("https://search.google.com/local/reviews?placeid=ChIJ8_z90V_5yTsRz8R7K6Rpx7E", "_blank");
-          }}
-        >
-          Read All Google Reviews
-        </Button>
       </div>
 
       {/* Tailwind utility classes for gradient mask */}

@@ -66,6 +66,10 @@ export default function RootLayout({
       className={`${inter.variable} ${playfair.variable} scroll-smooth antialiased`}
     >
       <head>
+        {/* Favicon Logo links for title bar tab branding */}
+        <link rel="icon" href="/images/logo.png" />
+        <link rel="shortcut icon" href="/images/logo.png" />
+        <link rel="apple-touch-icon" href="/images/logo.png" />
         {/* Google Tag Manager head script */}
         <Script
           id="gtm-script"
