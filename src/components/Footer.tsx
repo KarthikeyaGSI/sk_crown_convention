@@ -5,6 +5,7 @@ import Image from "next/image";
 import { footerBackground } from "@/lib/images";
 import { NAV_LINKS, VENUE_DETAILS } from "@/lib/constants";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -34,24 +35,48 @@ export default function Footer() {
             <p className="text-xs text-muted-text font-sans font-light leading-relaxed max-w-xs">
               Where celebrations meet luxury hospitality. Warangal's premier convention venue for weddings, receptions, and corporate galas.
             </p>
+            
+            {/* Social Icons with Framer Motion Hovers */}
             <div className="flex gap-4 pt-2">
-              <a href="#" className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-all duration-300" aria-label="Facebook">
+              <motion.a
+                href="#"
+                whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
+                aria-label="Facebook"
+              >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/>
                 </svg>
-              </a>
-              <a href="#" className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-all duration-300" aria-label="Instagram">
+              </motion.a>
+
+              <motion.a
+                href={VENUE_DETAILS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
+                aria-label="Instagram"
+              >
                 <svg className="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                   <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
                 </svg>
-              </a>
-              <a href="#" className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-all duration-300" aria-label="Twitter">
+              </motion.a>
+
+              <motion.a
+                href="#"
+                whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
+                aria-label="Twitter"
+              >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
-              </a>
+              </motion.a>
             </div>
           </div>
 
@@ -114,8 +139,16 @@ export default function Footer() {
           <p className="text-[10px] text-muted-text font-sans font-light tracking-wider">
             © {currentYear} {VENUE_DETAILS.name}. All Rights Reserved.
           </p>
-          <p className="text-[10px] text-muted-text font-sans font-light tracking-wider">
-            Digital Experience by <a href="#" className="text-gold hover:text-gold-soft transition-colors font-medium">MarketingKo Labs</a>
+          <p className="text-[10px] text-muted-text/75 font-sans font-light tracking-wider">
+            Digital Experience by{" "}
+            <a
+              href="https://linktr.ee/karthikeyathallapally"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gold hover:underline transition-colors font-medium"
+            >
+              MarketingKo Labs
+            </a>
           </p>
         </div>
 

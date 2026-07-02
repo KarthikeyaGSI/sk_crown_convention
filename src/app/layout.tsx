@@ -15,17 +15,35 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "SK Crown Convention | Luxury Wedding & Celebration Venue in Warangal",
-  description: "Experience SK Crown Convention, Warangal's premier luxury wedding destination and banquet hall. Crafted for lifetime memories, weddings, receptions, and corporate galas.",
+  title: "SK Crown Convention | Premium Wedding Venue in Warangal",
+  description: "Celebrate weddings, receptions, engagements and corporate events at SK Crown Convention, one of the finest wedding venues in Warangal.",
   keywords: ["SK Crown Convention", "Wedding Venue Warangal", "Banquet Hall Warangal", "Luxury Convention Center", "Warangal Function Hall"],
+  icons: {
+    icon: "/images/sk crown entrance.webp",
+    apple: "/images/sk crown entrance.webp",
+  },
   openGraph: {
-    title: "SK Crown Convention | Luxury Wedding Venue",
-    description: "Warangal's premier luxury wedding destination and banquet hall.",
+    title: "SK Crown Convention | Premium Wedding Venue in Warangal",
+    description: "Celebrate weddings, receptions, engagements and corporate events at SK Crown Convention, one of the finest wedding venues in Warangal.",
     url: "https://skcrown.com",
     siteName: "SK Crown Convention",
     locale: "en_IN",
     type: "website",
+    images: [
+      {
+        url: "/images/sk crown entrance.webp",
+        width: 800,
+        height: 600,
+        alt: "SK Crown Convention Entrance",
+      }
+    ]
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "SK Crown Convention | Premium Wedding Venue in Warangal",
+    description: "Celebrate weddings, receptions, engagements and corporate events at SK Crown Convention, one of the finest wedding venues in Warangal.",
+    images: ["/images/sk crown entrance.webp"],
+  }
 };
 
 export default function RootLayout({

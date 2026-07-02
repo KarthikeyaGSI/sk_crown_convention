@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Button from "./Button";
-import { venueImages } from "@/lib/images";
+import { venueImages, shimmerBlurDataUrl } from "@/lib/images";
 
 interface VenueStoryProps {
   onOpenBooking: () => void;
@@ -37,12 +37,6 @@ export default function VenueStory({ onOpenBooking }: VenueStoryProps) {
               From high-arched glass entrances to customizable ambient lighting, our spaces serve as a blank canvas for your dream wedding, corporate gala, or family milestone. Every corner is meticulously detailed to elevate the guest experience.
             </p>
             <div className="pt-4 flex gap-4">
-              <Button variant="secondary" onClick={() => {
-                const el = document.getElementById("experience");
-                if (el) el.scrollIntoView({ behavior: "smooth" });
-              }}>
-                Learn More
-              </Button>
               <Button variant="primary" showArrow={false} onClick={onOpenBooking}>
                 Book Now
               </Button>
@@ -55,12 +49,14 @@ export default function VenueStory({ onOpenBooking }: VenueStoryProps) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-7 relative h-[450px] md:h-[600px] w-full rounded-[24px] overflow-hidden group shadow-2xl"
+            className="lg:col-span-7 relative h-[350px] md:h-[600px] w-full rounded-[24px] overflow-hidden group shadow-2xl"
           >
             <Image
               src={venueImages[0]}
               alt="SK Crown Convention Luxury Interior"
               fill
+              placeholder="blur"
+              blurDataURL={shimmerBlurDataUrl(800, 600)}
               sizes="(max-width: 1024px) 100vw, 55vw"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             />

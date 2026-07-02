@@ -3,48 +3,48 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { galleryImages } from "@/lib/images";
+import { galleryImages, shimmerBlurDataUrl } from "@/lib/images";
 import { VENUE_DETAILS } from "@/lib/constants";
 import Button from "./Button";
 
 const EDITORIAL_GRID_LAYOUTS = [
   // 1. Hero Image (Full width block)
-  { colClass: "md:col-span-4 h-[350px] md:h-[600px]" },
+  { colClass: "col-span-2 md:col-span-4 h-[220px] md:h-[600px]" },
   // 2. Landscape 1
-  { colClass: "md:col-span-2 h-[260px] md:h-[350px]" },
+  { colClass: "col-span-1 md:col-span-2 h-[160px] md:h-[350px]" },
   // 3. Landscape 2
-  { colClass: "md:col-span-2 h-[260px] md:h-[350px]" },
+  { colClass: "col-span-1 md:col-span-2 h-[160px] md:h-[350px]" },
   // 4. Portrait 1
-  { colClass: "md:col-span-2 md:row-span-2 h-[450px] md:h-[720px]" },
+  { colClass: "col-span-2 md:col-span-2 md:row-span-2 h-[300px] md:h-[720px]" },
   // 5. Portrait 2
-  { colClass: "md:col-span-2 md:row-span-2 h-[450px] md:h-[720px]" },
+  { colClass: "col-span-2 md:col-span-2 md:row-span-2 h-[300px] md:h-[720px]" },
   // 6. Small 1
-  { colClass: "md:col-span-1 h-[180px] md:h-[240px]" },
+  { colClass: "col-span-1 md:col-span-1 h-[140px] md:h-[240px]" },
   // 7. Small 2
-  { colClass: "md:col-span-1 h-[180px] md:h-[240px]" },
+  { colClass: "col-span-1 md:col-span-1 h-[140px] md:h-[240px]" },
   // 8. Small 3
-  { colClass: "md:col-span-1 h-[180px] md:h-[240px]" },
+  { colClass: "col-span-1 md:col-span-1 h-[140px] md:h-[240px]" },
   // 9. Small 4
-  { colClass: "md:col-span-1 h-[180px] md:h-[240px]" },
+  { colClass: "col-span-1 md:col-span-1 h-[140px] md:h-[240px]" },
   // 10. Wide Banner
-  { colClass: "md:col-span-4 h-[260px] md:h-[400px]" },
+  { colClass: "col-span-2 md:col-span-4 h-[200px] md:h-[400px]" },
   // 11. Editorial 1
-  { colClass: "md:col-span-2 h-[260px] md:h-[450px]" },
+  { colClass: "col-span-1 md:col-span-2 h-[160px] md:h-[450px]" },
   // 12. Editorial 2
-  { colClass: "md:col-span-2 h-[260px] md:h-[450px]" },
+  { colClass: "col-span-1 md:col-span-2 h-[160px] md:h-[450px]" },
 ];
 
 export default function Gallery() {
   return (
-    <section id="gallery" className="py-32 md:py-48 bg-[#121212] border-b border-luxury-border">
+    <section id="gallery" className="py-24 md:py-36 bg-[#121212] border-b border-luxury-border">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Gallery Title & Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20 md:mb-28">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 md:mb-24">
           <div className="space-y-4">
             <span className="text-xs uppercase tracking-[0.25em] text-gold font-sans font-semibold">
               Moments of Celebration
             </span>
-            <h2 className="text-4xl md:text-5xl lg:text-[54px] font-serif font-bold text-white-soft leading-tight">
+            <h2 className="text-3xl md:text-5xl lg:text-[54px] font-serif font-bold text-white-soft leading-tight">
               Explore More Moments
             </h2>
             <div className="w-16 h-[1px] bg-gold" />
@@ -62,23 +62,25 @@ export default function Gallery() {
         </div>
 
         {/* Editorial Layout Asymmetric Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {galleryImages.map((src, index) => {
-            const layout = EDITORIAL_GRID_LAYOUTS[index] || { colClass: "md:col-span-1 h-[260px]" };
+            const layout = EDITORIAL_GRID_LAYOUTS[index] || { colClass: "col-span-1 h-[160px]" };
             return (
               <motion.div
                 key={src + index}
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.8, delay: (index % 4) * 0.1 }}
-                className={`group relative rounded-[24px] overflow-hidden border border-luxury-border bg-[#0B0B0B] ${layout.colClass}`}
+                className={`group relative rounded-[16px] md:rounded-[24px] overflow-hidden border border-luxury-border bg-[#0B0B0B] ${layout.colClass}`}
               >
                 <Image
                   src={src}
                   alt={`SK Crown Convention Celebration Moment ${index + 1}`}
                   fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  placeholder="blur"
+                  blurDataURL={shimmerBlurDataUrl(600, 400)}
+                  sizes="(max-width: 768px) 50vw, 25vw"
                   className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                   loading="lazy"
                 />

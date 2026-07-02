@@ -1,44 +1,83 @@
 export interface Review {
   id: string;
   author: string;
-  role: string;
   rating: number;
   content: string;
   date: string;
 }
 
-export const featuredReview: Review = {
-  id: "featured-1",
-  author: "Aravind Reddy",
-  role: "Groom's Father",
-  rating: 5,
-  content: "SK Crown Convention exceeded all our expectations for my son's wedding. The grandeur of the stage, the hospitality of the catering team, and the absolute beauty of the decor left our guests in awe. It is hands down the most luxurious and well-managed venue in Warangal.",
-  date: "2 weeks ago",
-};
-
-export const reviewsList: Review[] = [
+export const googleReviews: Review[] = [
   {
     id: "review-1",
-    author: "Pranitha Sharma",
-    role: "Bride",
+    author: "Mohammad Muddassir",
     rating: 5,
-    content: "The decor was magical and matched exactly what I had envisioned. The support staff took care of every detail, making it a stress-free experience for us.",
-    date: "1 month ago",
+    content: "Lovely place.. Big halls, good dining hall... Large kitchen. Spacious parking place...",
+    date: "5 months ago",
   },
   {
     id: "review-2",
-    author: "Siddharth Rao",
-    role: "Event Organizer",
+    author: "KHAJA KAMALUDDIN",
     rating: 5,
-    content: "From an operations perspective, SK Crown is a dream. The air conditioning is robust, parking is massive, and the 24/7 staff support is extremely helpful.",
-    date: "3 weeks ago",
+    content: "We recently hosted our wedding at SK CROWN CONVENTION and it exceeded all our expectations! The venue itself is stunning, with elegant décor and spacious halls that perfectly accommodated our guests. The lighting, floral arrangements, and overall ambiance created a magical atmosphere.",
+    date: "a year ago",
   },
   {
     id: "review-3",
-    author: "Meera Deshmukh",
-    role: "Corporate Event Host",
+    author: "Shahrukh Mohammed",
     rating: 5,
-    content: "We hosted our corporate annual gala here. High-class audio-visual setup, elegant dining arrangements, and very professional team.",
-    date: "2 months ago",
+    content: "Attended a Valima here, and the experience was fantastic. The hall is spacious, beautifully decorated, and perfect for large events. The staff was attentive, and the service was seamless. Highly recommend for weddings or any special occasion!",
+    date: "a year ago",
+  },
+  {
+    id: "review-4",
+    author: "Søhail Môhd",
+    rating: 5,
+    content: "Beautiful Places for weddings and special occasions perfect ambience and cool place",
+    date: "10 months ago",
+  },
+  {
+    id: "review-5",
+    author: "Sampoorna Bandari",
+    rating: 5,
+    content: "Nice hall...near mulugu road...government bus service also available... u can board bus in wgl or hnk bus stand and you can get down here... it is on main road only... 👍🏻👍🏻👍🏻",
+    date: "7 months ago",
+  },
+  {
+    id: "review-6",
+    author: "Azeem Siddiqui",
+    rating: 5,
+    content: "One of the best wedding halls I visited recently in Warangal. Spacious and well maintained. Beautiful layout and great facilities.",
+    date: "9 months ago",
+  },
+  {
+    id: "review-7",
+    author: "Narender Mankala",
+    rating: 4,
+    content: "Conveniently located on the highway road of Warangal. Big dining hall and function hall. Very convenient for guests coming from outside.",
+    date: "7 months ago",
+  },
+  {
+    id: "review-8",
+    author: "azeen shareef",
+    rating: 5,
+    content: "It was a great experience being at SK Crown Convention Hall. One of the finest amenities with great ambience and lovely atmosphere. Family gatherings have never been so blessed before.",
+    date: "8 months ago",
+  },
+  {
+    id: "review-9",
+    author: "sabi raja",
+    rating: 5,
+    content: "Only Best place for Marriage and reception. With All facilities and service.",
+    date: "5 months ago",
+  },
+  {
+    id: "review-10",
+    author: "Mohammad Amairuddin",
+    rating: 5,
+    content: "One of the best convention and banquet halls in Warangal and hanamkonda city, with huge capacity, centralized AC, and beautiful amenities.",
+    date: "2 years ago",
   },
 ];
+
+// Fallback featured review for other sections if needed
+export const featuredReview = googleReviews[1];

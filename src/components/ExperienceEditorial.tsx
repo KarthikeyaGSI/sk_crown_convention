@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { experienceImages, venueImages } from "@/lib/images";
+import { experienceImages, venueImages, shimmerBlurDataUrl } from "@/lib/images";
 
 const EDITORIAL_SECTIONS = [
   {
@@ -63,7 +63,7 @@ export default function ExperienceEditorial() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.8 }}
-                  className={`lg:col-span-8 relative h-[350px] md:h-[500px] rounded-[24px] overflow-hidden group border border-luxury-border shadow-2xl ${
+                  className={`lg:col-span-8 relative h-[300px] md:h-[500px] rounded-[24px] overflow-hidden group border border-luxury-border shadow-2xl ${
                     isLeft ? "lg:order-1" : "lg:order-2 lg:col-start-5"
                   }`}
                 >
@@ -71,6 +71,8 @@ export default function ExperienceEditorial() {
                     src={section.image}
                     alt={section.imageAlt}
                     fill
+                    placeholder="blur"
+                    blurDataURL={shimmerBlurDataUrl(800, 500)}
                     sizes="(max-width: 1024px) 100vw, 70vw"
                     className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                   />

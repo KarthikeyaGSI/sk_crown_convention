@@ -13,9 +13,10 @@ export const VENUE_DETAILS = {
   tagline: "Where Every Celebration Becomes A Lifetime Memory",
   location: "Warangal, Telangana",
   address: "SK Crown Convention, Hunter Road, Warangal, Telangana 506001",
-  phone: "+91 70709 66166", // Prefilled WA number is +9170709661 in prompt, but let's make it match formatting
-  phoneRaw: "9170709661", // As requested in prompt WA redirect
-  email: "info@skcrown.com",
+  phone: "+91 70709 66166",
+  phoneRaw: "9170709661",
+  email: "skcrown700@gmail.com",
+  instagram: "https://www.instagram.com/skcrownconvention",
   hours: "Open 24/7 for Bookings & Events",
   googleMapsLink: "https://maps.google.com/?q=SK+Crown+Convention+Hunter+Road+Warangal",
   features: [

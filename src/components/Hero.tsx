@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { heroImages } from "@/lib/images";
+import { heroImages, shimmerBlurDataUrl } from "@/lib/images";
 import { VENUE_DETAILS } from "@/lib/constants";
 import Button from "./Button";
 import { CalendarRange, ShieldCheck, MapPin, Wind, Hourglass } from "lucide-react";
@@ -54,6 +54,8 @@ export default function Hero({ onOpenBooking }: HeroProps) {
                 alt="SK Crown Convention Venue Background"
                 fill
                 priority
+                placeholder="blur"
+                blurDataURL={shimmerBlurDataUrl(1920, 1080)}
                 sizes="100vw"
                 className="object-cover"
               />

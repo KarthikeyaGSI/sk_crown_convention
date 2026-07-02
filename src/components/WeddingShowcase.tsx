@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { weddingShowcaseImages } from "@/lib/images";
-import Button from "./Button";
+import { weddingShowcaseImages, shimmerBlurDataUrl } from "@/lib/images";
 
 export default function WeddingShowcase() {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -38,7 +37,7 @@ export default function WeddingShowcase() {
               <button
                 key={item.title}
                 onClick={() => setActiveIdx(idx)}
-                className={`w-full text-left p-6 rounded-2xl border transition-all duration-300 font-sans ${
+                className={`w-full text-left p-6 rounded-2xl border transition-all duration-300 font-sans cursor-pointer ${
                   idx === activeIdx
                     ? "bg-luxury-card border-gold/40 text-gold shadow-lg"
                     : "bg-transparent border-luxury-border text-white-soft/60 hover:text-white-soft hover:border-luxury-border/65"
@@ -54,7 +53,7 @@ export default function WeddingShowcase() {
 
           {/* Large Showcase Image display */}
           <div className="lg:col-span-8 order-1 lg:order-2">
-            <div className="relative h-[400px] md:h-[550px] w-full rounded-[24px] overflow-hidden group shadow-2xl border border-luxury-border">
+            <div className="relative h-[300px] md:h-[550px] w-full rounded-[24px] overflow-hidden group shadow-2xl border border-luxury-border">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIdx}
@@ -68,6 +67,8 @@ export default function WeddingShowcase() {
                     src={weddingShowcaseImages[activeIdx].src}
                     alt={weddingShowcaseImages[activeIdx].title}
                     fill
+                    placeholder="blur"
+                    blurDataURL={shimmerBlurDataUrl(800, 550)}
                     sizes="(max-width: 1024px) 100vw, 65vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
