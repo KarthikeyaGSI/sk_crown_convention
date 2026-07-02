@@ -3,11 +3,12 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import Button from "./Button";
 import { venueImages, shimmerBlurDataUrl } from "@/lib/images";
 
 interface VenueStoryProps {
-  onOpenBooking: () => void;
+  onOpenBooking?: () => void;
 }
 
 export default function VenueStory({ onOpenBooking }: VenueStoryProps) {
@@ -37,9 +38,17 @@ export default function VenueStory({ onOpenBooking }: VenueStoryProps) {
               From high-arched glass entrances to customizable ambient lighting, our spaces serve as a blank canvas for your dream wedding, corporate gala, or family milestone. Every corner is meticulously detailed to elevate the guest experience.
             </p>
             <div className="pt-4 flex gap-4">
-              <Button variant="primary" showArrow={false} onClick={onOpenBooking}>
-                Book Now
-              </Button>
+              {onOpenBooking ? (
+                <Button variant="primary" showArrow={false} onClick={onOpenBooking}>
+                  Book Now
+                </Button>
+              ) : (
+                <Link href="/contact" passHref>
+                  <Button variant="primary" showArrow={false}>
+                    Book Now
+                  </Button>
+                </Link>
+              )}
             </div>
           </motion.div>
 

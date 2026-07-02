@@ -1,11 +1,10 @@
 export const NAV_LINKS = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Showcase", href: "#showcase" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Reviews", href: "#reviews" },
-  { label: "Plan Your Visit", href: "#visit" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Experience", href: "/experience" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Reviews", href: "/reviews" },
+  { label: "Plan Your Visit", href: "/visit" },
 ];
 
 export const VENUE_DETAILS = {
@@ -13,8 +12,8 @@ export const VENUE_DETAILS = {
   tagline: "Where Every Celebration Becomes A Lifetime Memory",
   location: "Warangal, Telangana",
   address: "SK Crown Convention, Hunter Road, Warangal, Telangana 506001",
-  phone: "+91 70709 66166",
-  phoneRaw: "9170709661",
+  phone: "+91 7070709661",
+  phoneRaw: "917070709661",
   email: "skcrown700@gmail.com",
   instagram: "https://www.instagram.com/skcrownconvention",
   hours: "Open 24/7 for Bookings & Events",

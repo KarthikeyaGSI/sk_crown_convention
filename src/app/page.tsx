@@ -26,35 +26,35 @@ export default function Home() {
 
       {/* Main Content Layout */}
       <main className="flex-grow">
-        {/* Arrival: Hero slideshow and vignette overlays */}
+        {/* Arrival: Hero slideshow */}
         <Hero onOpenBooking={openBooking} />
 
         {/* Story: Editorial Split Intro */}
         <VenueStory onOpenBooking={openBooking} />
 
-        {/* Experience: Alternating full-width large editorial layout modules */}
+        {/* Experience Teaser */}
         <ExperienceEditorial />
 
-        {/* Wedding & Decor: Grand stage themes and design selections */}
+        {/* Showcase */}
         <WeddingShowcase />
 
-        {/* Gallery: Asymmetric curated editorial image layout puzzle */}
+        {/* Gallery Preview */}
         <Gallery />
 
-        {/* Reviews: Google verification rating and client testimonials */}
+        {/* Reviews */}
         <Reviews />
 
-        {/* Visit: Minimalist coordinate cards and Google Maps Directions */}
+        {/* Visit Info */}
         <VisitInfo />
 
         {/* CTA: Final reservation prompt */}
         <CTA onOpenBooking={openBooking} />
       </main>
 
-      {/* Footer information */}
+      {/* Footer */}
       <Footer />
 
-      {/* Global Booking Dialog */}
+      {/* Booking Dialog */}
       <BookingModal isOpen={isBookingOpen} onClose={closeBooking} />
     </div>
   );

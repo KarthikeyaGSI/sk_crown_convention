@@ -2,13 +2,18 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { footerBackground } from "@/lib/images";
 import { NAV_LINKS, VENUE_DETAILS } from "@/lib/constants";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, ArrowUp, Send } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <footer className="relative bg-[#0B0B0B] border-t border-luxury-border overflow-hidden pt-20 pb-10">
@@ -36,20 +41,8 @@ export default function Footer() {
               Where celebrations meet luxury hospitality. Warangal's premier convention venue for weddings, receptions, and corporate galas.
             </p>
             
-            {/* Social Icons with Framer Motion Hovers */}
+            {/* Social Icons (Instagram, WhatsApp, Phone only) */}
             <div className="flex gap-4 pt-2">
-              <motion.a
-                href="#"
-                whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
-                transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
-                aria-label="Facebook"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/>
-                </svg>
-              </motion.a>
-
               <motion.a
                 href={VENUE_DETAILS.instagram}
                 target="_blank"
@@ -67,15 +60,25 @@ export default function Footer() {
               </motion.a>
 
               <motion.a
-                href="#"
+                href={`https://wa.me/${VENUE_DETAILS.phoneRaw}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
                 transition={{ type: "spring", stiffness: 300, damping: 15 }}
                 className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
-                aria-label="Twitter"
+                aria-label="WhatsApp"
               >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
+                <Send className="w-4 h-4" />
+              </motion.a>
+
+              <motion.a
+                href={`tel:${VENUE_DETAILS.phoneRaw}`}
+                whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
+                aria-label="Phone"
+              >
+                <Phone className="w-4 h-4" />
               </motion.a>
             </div>
           </div>
@@ -88,12 +91,12 @@ export default function Footer() {
             <ul className="space-y-2">
               {NAV_LINKS.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-xs text-muted-text hover:text-gold font-sans font-light transition-colors block py-0.5"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -114,7 +117,7 @@ export default function Footer() {
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-gold flex-shrink-0" />
                 <a
-                  href={`tel:${VENUE_DETAILS.phone.replace(/\s+/g, "")}`}
+                  href={`tel:${VENUE_DETAILS.phoneRaw}`}
                   className="text-xs text-muted-text hover:text-gold font-sans font-light transition-colors"
                 >
                   {VENUE_DETAILS.phone}
@@ -139,17 +142,27 @@ export default function Footer() {
           <p className="text-[10px] text-muted-text font-sans font-light tracking-wider">
             © {currentYear} {VENUE_DETAILS.name}. All Rights Reserved.
           </p>
-          <p className="text-[10px] text-muted-text/75 font-sans font-light tracking-wider">
-            Digital Experience by{" "}
-            <a
-              href="https://linktr.ee/karthikeyathallapally"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gold hover:underline transition-colors font-medium"
+          
+          {/* Back to Top & Digital Credits */}
+          <div className="flex items-center gap-6">
+            <button
+              onClick={scrollToTop}
+              className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-text hover:text-gold transition-colors font-sans cursor-pointer focus:outline-none"
             >
-              MarketingKo Labs
-            </a>
-          </p>
+              Back to Top <ArrowUp className="w-3.5 h-3.5" />
+            </button>
+            <p className="text-[10px] text-muted-text/75 font-sans font-light tracking-wider">
+              Digital Experience by{" "}
+              <a
+                href="https://linktr.ee/karthikeyathallapally"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gold hover:underline transition-colors font-medium"
+              >
+                MarketingKo Labs
+              </a>
+            </p>
+          </div>
         </div>
 
       </div>

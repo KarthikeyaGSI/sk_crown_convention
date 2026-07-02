@@ -15,8 +15,9 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "SK Crown Convention | Premium Wedding Venue in Warangal",
-  description: "Celebrate weddings, receptions, engagements and corporate events at SK Crown Convention, one of the finest wedding venues in Warangal.",
+  metadataBase: new URL("https://skcrown.com"),
+  title: "SK Crown Convention | Luxury Wedding Venue in Warangal",
+  description: "Celebrate weddings, receptions, engagements and corporate events at SK Crown Convention, one of the finest luxury wedding venues in Warangal.",
   keywords: ["SK Crown Convention", "Wedding Venue Warangal", "Banquet Hall Warangal", "Luxury Convention Center", "Warangal Function Hall"],
   icons: {
     icon: "/images/sk crown entrance.webp",
