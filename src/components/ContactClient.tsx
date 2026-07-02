@@ -185,7 +185,7 @@ Please let me know the availability.
 
 Thank you.`;
 
-        const whatsappNum = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "9170709661";
+        const whatsappNum = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917070709661";
         window.location.href = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(waMessage)}`;
       } else {
         setSubmitError(result.message || "We couldn't submit your enquiry.");
@@ -262,7 +262,7 @@ Thank you.`;
                   Try Again
                 </Button>
                 <a
-                  href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "9170709661"}`}
+                  href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917070709661"}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex"
