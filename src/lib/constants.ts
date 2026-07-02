@@ -8,16 +8,17 @@ export const NAV_LINKS = [
 ];
 
 export const VENUE_DETAILS = {
-  name: "SK Crown Convention",
-  tagline: "Where Every Celebration Becomes A Lifetime Memory",
-  location: "Warangal, Telangana",
-  address: "SK Crown Convention, Hunter Road, Warangal, Telangana 506001",
-  phone: "+91 7070709661",
-  phoneRaw: "917070709661",
+  name: "SK Crown Convention Hall A/c",
+  tagline: "Beautiful and spacious Hall For weddings and Events",
+  location: "Mulug Road, Warangal",
+  address: "Sk crown Mulug Road, Near Hp Petrol Station, Hanuman Junction, Warangal, India 506006",
+  phone: "+91 7070709661, +91 7900775577",
+  phoneRaw: "917070709661", // primary callback number
+  phoneSecondaryRaw: "917900775577",
   email: "skcrown700@gmail.com",
   instagram: "https://www.instagram.com/skcrownconvention",
   hours: "Open 24/7 for Bookings & Events",
-  googleMapsLink: "https://maps.google.com/?q=SK+Crown+Convention+Hunter+Road+Warangal",
+  googleMapsLink: "https://maps.app.goo.gl/EVGcvP6fjXupsRUd6",
   features: [
     {
       title: "Capacity",
@@ -37,7 +38,7 @@ export const VENUE_DETAILS = {
     },
     {
       title: "Prime Location",
-      desc: "Conveniently situated on Hunter Road, Warangal",
+      desc: "Conveniently situated on Mulug Road, Warangal",
     },
   ],
 };
