@@ -31,9 +31,12 @@ export default function Hero({ onOpenBooking }: HeroProps) {
   }, []);
 
   return (
-    <section id="home" className="relative min-h-screen flex flex-col justify-between">
-      {/* 100vh Slideshow Container */}
-      <div className="absolute inset-0 w-full h-[100vh] overflow-hidden z-0">
+    <section 
+      id="home" 
+      className="relative min-h-[calc(100vh-var(--navbar-height))] flex flex-col justify-between pt-[var(--navbar-height)]"
+    >
+      {/* Immersive Slideshow Container */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
         <AnimatePresence mode="popLayout">
           <motion.div
             key={currentImageIndex}
@@ -54,6 +57,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
                 alt="SK Crown Convention Venue Background"
                 fill
                 priority
+                fetchPriority="high"
                 placeholder="blur"
                 blurDataURL={shimmerBlurDataUrl(1920, 1080)}
                 sizes="100vw"
@@ -69,13 +73,13 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] via-transparent to-black/40 z-10" />
       </div>
 
-      {/* Hero Content - Left Aligned */}
-      <div className="relative z-20 max-w-7xl mx-auto px-6 md:px-12 w-full pt-[32vh] pb-[12vh] flex-1 flex flex-col justify-center">
+      {/* Hero Content - Centered Flex Area */}
+      <div className="relative z-20 max-w-7xl mx-auto px-6 md:px-12 w-full pt-12 pb-16 flex-1 flex flex-col justify-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.2 }}
-          className="max-w-4xl"
+          className="max-w-4xl -translate-y-8 md:-translate-y-16"
         >
           {/* Animated Logo / Badge */}
           <motion.div
@@ -91,13 +95,13 @@ export default function Hero({ onOpenBooking }: HeroProps) {
             <span className="h-[1px] w-8 bg-gold/50" />
           </motion.div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-[90px] font-serif font-bold text-white-soft leading-[1.05] tracking-tight mb-8">
+          <h1 className="text-4xl md:text-7xl lg:text-[88px] font-serif font-bold text-white-soft leading-[1.05] tracking-tight mb-8">
             Where Every Celebration <br />
             <span className="text-gold-soft">Becomes A Lifetime Memory</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-muted-text font-sans font-light max-w-2xl mb-12 leading-relaxed">
-            Wedding Venue in Warangal for unforgettable celebrations. Indulge in Aman-inspired architecture, grand banquet halls, and spectacular service design.
+          <p className="text-base md:text-xl text-muted-text font-sans font-light max-w-2xl mb-12 leading-relaxed">
+            {VENUE_DETAILS.tagline}. Celebrate in luxury on Mulug Road, Warangal, with premium banquets, fully AC halls, and massive parking space.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6">
@@ -119,12 +123,12 @@ export default function Hero({ onOpenBooking }: HeroProps) {
       </div>
 
       {/* Centered Slider Indicators */}
-      <div className="absolute bottom-[22vh] left-1/2 -translate-x-1/2 z-20 flex gap-3">
+      <div className="absolute bottom-[20vh] left-1/2 -translate-x-1/2 z-20 flex gap-3">
         {heroImages.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentImageIndex(idx)}
-            className={`h-1.5 transition-all duration-500 rounded-full ${
+            className={`h-1.5 transition-all duration-500 rounded-full cursor-pointer ${
               idx === currentImageIndex ? "w-8 bg-gold" : "w-2 bg-white/30"
             }`}
             aria-label={`Go to slide ${idx + 1}`}
@@ -132,7 +136,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         ))}
       </div>
 
-      {/* Below Hero: Premium Highlight Strip */}
+      {/* Highlight Strip */}
       <div className="relative z-20 bg-luxury-card border-y border-luxury-border py-10 w-full mt-auto">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-luxury-border">

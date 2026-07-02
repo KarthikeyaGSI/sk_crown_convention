@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { NAV_LINKS, VENUE_DETAILS } from "@/lib/constants";
@@ -30,17 +31,28 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
       <header
         className={`fixed top-0 left-0 w-full z-40 transition-all duration-500 border-b ${
           scrolled
-            ? "bg-[#0B0B0B]/85 backdrop-blur-xl border-gold/15 py-3.5"
-            : "bg-transparent border-transparent py-5"
+            ? "bg-[#0B0B0B]/85 backdrop-blur-xl border-gold/15 py-3"
+            : "bg-transparent border-transparent py-4.5"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo with Crest Icon */}
           <Link
             href="/"
-            className="font-serif text-lg md:text-xl font-bold tracking-[0.2em] text-gold hover:text-gold-soft transition-colors"
+            className="flex items-center gap-3 group focus:outline-none"
           >
-            SK CROWN
+            <div className="relative w-8 h-8 md:w-10 h-10 overflow-hidden transition-transform duration-300 group-hover:scale-105">
+              <Image
+                src="/images/logo.png"
+                alt="SK Crown Logo Crest"
+                fill
+                priority
+                className="object-contain"
+              />
+            </div>
+            <span className="font-serif text-base md:text-lg font-bold tracking-[0.2em] text-gold group-hover:text-gold-soft transition-colors select-none">
+              SK CROWN
+            </span>
           </Link>
 
           {/* Desktop Navigation Menu */}

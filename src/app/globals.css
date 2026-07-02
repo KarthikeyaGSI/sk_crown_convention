@@ -15,6 +15,7 @@
 
 :root {
   color-scheme: dark;
+  --navbar-height: 80px;
 }
 
 html, body {

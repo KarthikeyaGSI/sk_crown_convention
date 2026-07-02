@@ -7,8 +7,8 @@ import { VENUE_DETAILS } from "@/lib/constants";
 import { MapPin, Phone, Mail, Clock, ShieldCheck, Compass, Send } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Plan Your Visit | SK Crown Convention",
-  description: "Get directions, embedded maps, and travel specifications for SK Crown Convention on Hunter Road, Warangal. Plan your venue visit today.",
+  title: "Plan Your Visit | SK Crown Convention Hall A/c",
+  description: "Get directions, embedded maps, and travel specifications for SK Crown Convention Hall A/c on Mulug Road, Warangal. Plan your venue visit today.",
   keywords: ["SK Crown Directions", "SK Crown Location Map", "Convention Hall Address Warangal"],
 };
 
@@ -16,14 +16,14 @@ export default function VisitPage() {
   const highlights = [
     { title: "Dedicated Valet Parking", desc: "Secured on-site spaces accommodating up to 500+ premium vehicles." },
     { title: "Highway Accessibility", desc: "Located directly on the highway corridors for easy bus/cab transit." },
-    { title: "Prime Landmarks", desc: "Conveniently situated near Hunter Road peddamma gadda intersections." },
+    { title: "Prime Landmarks", desc: "Conveniently situated near Mulug Road Hanuman Junction petrol station." },
   ];
 
   return (
     <div className="min-h-screen bg-luxury-bg text-white-soft flex flex-col font-sans">
       <Navbar />
       
-      <main className="flex-grow pt-32 pb-24 max-w-7xl mx-auto px-6 md:px-12 w-full space-y-16">
+      <main className="flex-grow pt-[calc(var(--navbar-height)+3rem)] pb-24 max-w-7xl mx-auto px-6 md:px-12 w-full space-y-16">
         {/* Header */}
         <div className="max-w-3xl space-y-4">
           <span className="text-xs uppercase tracking-[0.25em] text-gold font-sans font-semibold">
@@ -43,7 +43,7 @@ export default function VisitPage() {
             <div className="relative w-full h-[350px] md:h-[500px] rounded-[24px] overflow-hidden border border-luxury-border shadow-2xl">
               <iframe
                 title="SK Crown Convention Google Maps Location"
-                src="https://maps.google.com/maps?q=SK+Crown+Convention+Hunter+Road+Warangal&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                src="https://maps.google.com/maps?q=SK+Crown+Convention+Mulug+Road+Warangal&t=&z=14&ie=UTF8&iwloc=&output=embed"
                 className="absolute inset-0 w-full h-full grayscale opacity-80 invert filter hover:filter-none transition-all duration-700"
                 allowFullScreen
                 loading="lazy"
@@ -94,7 +94,7 @@ export default function VisitPage() {
                 <Phone className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
                 <div>
                   <h3 className="text-xs uppercase tracking-wider font-serif font-bold text-gold mb-1">
-                    Direct Line
+                    Direct Lines
                   </h3>
                   <a
                     href={`tel:${VENUE_DETAILS.phoneRaw}`}
