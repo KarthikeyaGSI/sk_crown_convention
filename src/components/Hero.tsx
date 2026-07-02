@@ -74,7 +74,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
       </div>
 
       {/* Hero Content - Centered Flex Area */}
-      <div className="relative z-20 max-w-7xl mx-auto px-6 md:px-12 w-full pt-12 pb-16 flex-1 flex flex-col justify-center">
+      <div className="relative z-20 max-w-7xl mx-auto px-6 md:px-12 w-full pt-20 md:pt-28 pb-16 flex-1 flex flex-col justify-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
