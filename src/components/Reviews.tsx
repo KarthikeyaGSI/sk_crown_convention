@@ -15,7 +15,7 @@ export default function Reviews() {
   return (
     <section id="reviews" className="py-24 md:py-36 bg-[#0B0B0B] border-b border-luxury-border overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12 mb-16">
-        
+
         {/* Title & Google Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
           <div className="space-y-4">
@@ -27,7 +27,7 @@ export default function Reviews() {
             </h2>
             <div className="w-16 h-[1px] bg-gold" />
           </div>
-          
+
           {/* Verification Badge */}
           <div className="flex items-center gap-4 bg-luxury-card border border-luxury-border px-6 py-3.5 rounded-2xl">
             <div>
@@ -43,14 +43,14 @@ export default function Reviews() {
             </div>
             <div className="h-8 w-[1px] bg-luxury-border" />
             <div className="text-xs text-muted-text font-sans leading-relaxed">
-              177 verified <br />Google Reviews
+              177 verified+ <br />Google Reviews
             </div>
           </div>
         </div>
       </div>
 
       {/* Infinite Horizontal Marquee Container */}
-      <div 
+      <div
         className="relative w-full flex items-center overflow-hidden py-4 select-none mask-gradient"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}

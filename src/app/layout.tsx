@@ -17,8 +17,11 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://skcrown.com"),
-  title: "SK Crown Convention Hall A/c | Luxury Wedding Venue in Warangal",
-  description: "Celebrate weddings, receptions, engagements and corporate events at SK Crown Convention Hall A/c, one of the finest luxury wedding venues on Mulug Road, Warangal. Fully climate-controlled spaces and parking.",
+  title: {
+    default: "SK Crown Convention Hall A/c",
+    template: "%s | SK Crown Convention Hall A/c",
+  },
+  description: "Luxury wedding venue in Warangal for weddings, receptions, engagements, corporate events and unforgettable celebrations.",
   keywords: [
     "SK Crown Convention Hall A/c",
     "Wedding Venue Mulug Road Warangal",
@@ -28,9 +31,11 @@ export const metadata: Metadata = {
     "Hanuman Junction Function Hall"
   ],
   icons: {
-    icon: "/images/logo.png",
-    apple: "/images/logo.png",
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
+  manifest: "/site.webmanifest",
   openGraph: {
     title: "SK Crown Convention Hall A/c | Luxury Wedding Venue in Warangal",
     description: "Celebrate weddings, receptions, engagements and corporate events at SK Crown Convention Hall A/c, one of the finest luxury wedding venues on Mulug Road, Warangal.",
@@ -40,10 +45,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/sk crown entrance.webp",
+        url: "/images/logo.png",
         width: 800,
         height: 600,
-        alt: "SK Crown Convention Hall A/c Entrance",
+        alt: "SK Crown Convention Hall A/c Logo",
       }
     ]
   },
@@ -51,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "SK Crown Convention Hall A/c | Luxury Wedding Venue in Warangal",
     description: "Celebrate weddings, receptions, engagements and corporate events at SK Crown Convention Hall A/c, one of the finest luxury wedding venues on Mulug Road, Warangal.",
-    images: ["/images/sk crown entrance.webp"],
+    images: ["/images/logo.png"],
   }
 };
 
