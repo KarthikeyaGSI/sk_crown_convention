@@ -28,8 +28,8 @@ export const metadata: Metadata = {
     "Hanuman Junction Function Hall"
   ],
   icons: {
-    icon: "/images/sk crown entrance.webp",
-    apple: "/images/sk crown entrance.webp",
+    icon: "/images/logo.png",
+    apple: "/images/logo.png",
   },
   openGraph: {
     title: "SK Crown Convention Hall A/c | Luxury Wedding Venue in Warangal",

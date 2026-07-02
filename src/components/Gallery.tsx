@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { galleryImages, shimmerBlurDataUrl } from "@/lib/images";
 import { VENUE_DETAILS } from "@/lib/constants";
 import Button from "./Button";
@@ -50,14 +51,11 @@ export default function Gallery() {
             <div className="w-16 h-[1px] bg-gold" />
           </div>
           <div>
-            <Button
-              variant="secondary"
-              onClick={() => {
-                window.open(VENUE_DETAILS.googleMapsLink, "_blank");
-              }}
-            >
-              View Full Gallery
-            </Button>
+            <Link href="/gallery" passHref>
+              <Button variant="secondary">
+                View All Images
+              </Button>
+            </Link>
           </div>
         </div>
 

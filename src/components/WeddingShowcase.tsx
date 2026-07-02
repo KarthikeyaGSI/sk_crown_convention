@@ -9,10 +9,10 @@ export default function WeddingShowcase() {
   const [activeIdx, setActiveIdx] = useState(0);
 
   return (
-    <section id="showcase" className="py-24 md:py-36 bg-[#0B0B0B] border-b border-luxury-border">
+    <section id="showcase" className="py-20 md:py-36 bg-[#0B0B0B] border-b border-luxury-border">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Editorial Layout Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16 md:mb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12 md:mb-24">
           <div className="lg:col-span-8 space-y-4">
             <span className="text-xs uppercase tracking-[0.25em] text-gold font-sans font-semibold">
               Exquisite Themes & Layouts
@@ -30,30 +30,30 @@ export default function WeddingShowcase() {
         </div>
 
         {/* Dynamic Showcase Presentation */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
           {/* Theme Selector list */}
-          <div className="lg:col-span-4 order-2 lg:order-1 space-y-3">
+          <div className="lg:col-span-4 order-2 lg:order-1 space-y-3 flex flex-col justify-center">
             {weddingShowcaseImages.map((item, idx) => (
               <button
                 key={item.title}
                 onClick={() => setActiveIdx(idx)}
-                className={`w-full text-left p-6 rounded-2xl border transition-all duration-300 font-sans cursor-pointer ${
+                className={`w-full text-left p-4 md:p-6 rounded-2xl border transition-all duration-300 font-sans cursor-pointer focus:outline-none ${
                   idx === activeIdx
-                    ? "bg-luxury-card border-gold/40 text-gold shadow-lg"
+                    ? "bg-luxury-card border-gold/45 text-gold shadow-lg"
                     : "bg-transparent border-luxury-border text-white-soft/60 hover:text-white-soft hover:border-luxury-border/65"
                 }`}
               >
-                <span className="text-xs tracking-wider text-gold font-semibold uppercase block mb-1">
+                <span className="text-[10px] tracking-wider text-gold font-semibold uppercase block mb-1">
                   Theme 0{idx + 1}
                 </span>
-                <span className="text-lg font-serif font-bold block">{item.title}</span>
+                <span className="text-sm md:text-lg font-serif font-bold block">{item.title}</span>
               </button>
             ))}
           </div>
 
           {/* Large Showcase Image display */}
           <div className="lg:col-span-8 order-1 lg:order-2">
-            <div className="relative h-[300px] md:h-[550px] w-full rounded-[24px] overflow-hidden group shadow-2xl border border-luxury-border">
+            <div className="relative h-[360px] sm:h-[450px] md:h-[550px] w-full rounded-[24px] overflow-hidden group shadow-2xl border border-luxury-border">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIdx}
@@ -73,11 +73,11 @@ export default function WeddingShowcase() {
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                   {/* Glass overlay with details */}
-                  <div className="absolute inset-x-6 bottom-6 p-6 md:p-8 bg-[#121212]/80 backdrop-blur-md border border-white/5 rounded-2xl">
-                    <h3 className="text-xl md:text-2xl font-serif font-bold text-white-soft">
+                  <div className="absolute inset-x-4 bottom-4 md:inset-x-6 md:bottom-6 p-4 md:p-8 bg-[#121212]/90 backdrop-blur-md border border-white/5 rounded-2xl">
+                    <h3 className="text-sm md:text-2xl font-serif font-bold text-white-soft">
                       {weddingShowcaseImages[activeIdx].title}
                     </h3>
-                    <p className="text-xs md:text-sm text-muted-text font-sans font-light mt-2 leading-relaxed">
+                    <p className="text-[10px] md:text-sm text-muted-text font-sans font-light mt-1.5 md:mt-2 leading-relaxed line-clamp-3">
                       {weddingShowcaseImages[activeIdx].description}
                     </p>
                   </div>
