@@ -11,7 +11,7 @@ interface BookingModalProps {
   onClose: () => void;
 }
 
-const EVENT_TYPES = ["Wedding", "Reception", "Corporate", "Birthday", "Engagement"];
+const EVENT_TYPES = ["Wedding", "Reception", "Corporate", "Birthday", "Engagement", "Other"];
 
 export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [step, setStep] = useState(1);
@@ -32,7 +32,11 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleSelectEventType = (type: string) => {
-    setFormData({ ...formData, eventType: type });
+    if (type === "Other") {
+      setFormData({ ...formData, eventType: "Other: " });
+    } else {
+      setFormData({ ...formData, eventType: type });
+    }
     setErrors({ ...errors, eventType: "" });
   };
 
@@ -58,7 +62,11 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
     const newErrors: Record<string, string> = {};
 
     if (currentStep === 1) {
-      if (!formData.eventType) newErrors.eventType = "Please select an event type.";
+      if (!formData.eventType) {
+        newErrors.eventType = "Please select an event type.";
+      } else if (formData.eventType.trim() === "Other" || formData.eventType.trim() === "Other:") {
+        newErrors.eventType = "Please specify your other event type details.";
+      }
     } else if (currentStep === 2) {
       if (!formData.date) newErrors.date = "Please select a preferred date.";
       
@@ -305,24 +313,48 @@ Thank you.`;
                       What type of occasion are you celebrating?
                     </p>
                     <div className="grid grid-cols-1 gap-2">
-                      {EVENT_TYPES.map((type) => (
-                        <button
-                          key={type}
-                          type="button"
-                          onClick={() => handleSelectEventType(type)}
-                          className={`w-full py-3 px-5 rounded-xl font-sans text-left text-xs md:text-sm font-medium transition-all duration-300 border flex justify-between items-center cursor-pointer ${
-                            formData.eventType === type
-                              ? "bg-gold/10 border-gold text-gold shadow-[0_0_15px_rgba(199,163,106,0.1)]"
-                              : "bg-[#0B0B0B]/50 border-luxury-border text-white-soft hover:border-gold/30"
-                          }`}
-                        >
-                          {type}
-                          {formData.eventType === type && (
-                            <CheckCircle2 className="w-4 h-4 text-gold" />
-                          )}
-                        </button>
-                      ))}
+                      {EVENT_TYPES.map((type) => {
+                        const isSelected = type === "Other"
+                          ? formData.eventType.startsWith("Other")
+                          : formData.eventType === type;
+                        return (
+                          <button
+                            key={type}
+                            type="button"
+                            onClick={() => handleSelectEventType(type)}
+                            className={`w-full py-3 px-5 rounded-xl font-sans text-left text-xs md:text-sm font-medium transition-all duration-300 border flex justify-between items-center cursor-pointer ${
+                              isSelected
+                                ? "bg-gold/10 border-gold text-gold shadow-[0_0_15px_rgba(199,163,106,0.1)]"
+                                : "bg-[#0B0B0B]/50 border-luxury-border text-white-soft hover:border-gold/30"
+                            }`}
+                          >
+                            {type}
+                            {isSelected && (
+                              <CheckCircle2 className="w-4 h-4 text-gold" />
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
+                    
+                    {formData.eventType.startsWith("Other") && (
+                      <div className="mt-3 space-y-1.5 animate-fadeIn">
+                        <label className="text-[10px] uppercase tracking-widest text-gold font-medium">
+                          Specify Other Event Type
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Anniversary, Housewarming..."
+                          value={formData.eventType.replace("Other: ", "")}
+                          onChange={(e) => {
+                            setFormData({ ...formData, eventType: `Other: ${e.target.value}` });
+                            setErrors({ ...errors, eventType: "" });
+                          }}
+                          className="w-full bg-[#0B0B0B]/50 border border-luxury-border rounded-xl px-4 py-2.5 text-white-soft font-sans text-xs md:text-sm focus:border-gold focus:outline-none transition-colors"
+                        />
+                      </div>
+                    )}
+
                     {errors.eventType && (
                       <p className="text-[10px] text-red-400 font-sans">{errors.eventType}</p>
                     )}
