@@ -1,8 +1,8 @@
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
-import { googleReviews, Review } from "./reviews";
-import { galleryImages, weddingShowcaseImages } from "./images";
+import { fallbackReviews, fallbackGallery, fallbackShowcase, Review } from "./fallback-data";
 import { defineQuery } from "next-sanity";
+
 
 // Queries
 const REVIEWS_QUERY = defineQuery(`
@@ -47,7 +47,7 @@ export async function getReviews(): Promise<Review[]> {
   } catch (error) {
     console.error("Failed to fetch reviews from Sanity, falling back to static data:", error);
   }
-  return googleReviews;
+  return fallbackReviews;
 }
 
 export async function getGalleryImages(): Promise<string[]> {
@@ -59,7 +59,7 @@ export async function getGalleryImages(): Promise<string[]> {
   } catch (error) {
     console.error("Failed to fetch gallery images from Sanity, falling back to static data:", error);
   }
-  return galleryImages;
+  return fallbackGallery;
 }
 
 export async function getShowcaseEvents(): Promise<Array<{ src: string; title: string; description: string }>> {
@@ -75,5 +75,6 @@ export async function getShowcaseEvents(): Promise<Array<{ src: string; title: s
   } catch (error) {
     console.error("Failed to fetch showcase events from Sanity, falling back to static data:", error);
   }
-  return weddingShowcaseImages;
+  return fallbackShowcase;
 }
+
