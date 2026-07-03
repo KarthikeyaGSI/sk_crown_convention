@@ -1,12 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { weddingShowcaseImages, shimmerBlurDataUrl } from "@/lib/images";
 
 export default function WeddingShowcase() {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [events, setEvents] = useState<Array<{ src: string; title: string; description: string }>>(weddingShowcaseImages);
+
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const { getShowcaseEvents } = await import("@/lib/sanity-data");
+        const data = await getShowcaseEvents();
+        setEvents(data);
+      } catch (err) {
+        console.error("Error loading showcase events:", err);
+      }
+    }
+    fetchEvents();
+  }, []);
+
+  // Safety bounds check
+  const activeEvent = events[activeIdx] || events[0] || weddingShowcaseImages[0];
 
   return (
     <section id="showcase" className="py-20 md:py-36 bg-[#0B0B0B] border-b border-luxury-border">
@@ -33,7 +51,7 @@ export default function WeddingShowcase() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
           {/* Theme Selector list */}
           <div className="lg:col-span-4 order-2 lg:order-1 space-y-3 flex flex-col justify-center">
-            {weddingShowcaseImages.map((item, idx) => (
+            {events.map((item, idx) => (
               <button
                 key={item.title}
                 onClick={() => setActiveIdx(idx)}
@@ -64,8 +82,8 @@ export default function WeddingShowcase() {
                   className="absolute inset-0 w-full h-full"
                 >
                   <Image
-                    src={weddingShowcaseImages[activeIdx].src}
-                    alt={weddingShowcaseImages[activeIdx].title}
+                    src={activeEvent.src}
+                    alt={activeEvent.title}
                     fill
                     placeholder="blur"
                     blurDataURL={shimmerBlurDataUrl(800, 550)}
@@ -75,10 +93,10 @@ export default function WeddingShowcase() {
                   {/* Glass overlay with details */}
                   <div className="absolute inset-x-4 bottom-4 md:inset-x-6 md:bottom-6 p-4 md:p-8 bg-[#121212]/90 backdrop-blur-md border border-white/5 rounded-2xl">
                     <h3 className="text-sm md:text-2xl font-serif font-bold text-white-soft">
-                      {weddingShowcaseImages[activeIdx].title}
+                      {activeEvent.title}
                     </h3>
                     <p className="text-[10px] md:text-sm text-muted-text font-sans font-light mt-1.5 md:mt-2 leading-relaxed line-clamp-3">
-                      {weddingShowcaseImages[activeIdx].description}
+                      {activeEvent.description}
                     </p>
                   </div>
                 </motion.div>

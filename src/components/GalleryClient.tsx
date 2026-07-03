@@ -23,18 +23,32 @@ const EDITORIAL_GRID_LAYOUTS = [
 
 export default function GalleryClient() {
   const [index, setIndex] = useState<number | null>(null);
+  const [images, setImages] = useState<string[]>(galleryImages);
+
+  useEffect(() => {
+    async function fetchImages() {
+      try {
+        const { getGalleryImages } = await import("@/lib/sanity-data");
+        const data = await getGalleryImages();
+        setImages(data);
+      } catch (err) {
+        console.error("Error loading gallery images:", err);
+      }
+    }
+    fetchImages();
+  }, []);
 
   const handlePrev = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     if (index !== null) {
-      setIndex((prev) => (prev === 0 ? galleryImages.length - 1 : prev! - 1));
+      setIndex((prev) => (prev === 0 ? images.length - 1 : prev! - 1));
     }
   };
 
   const handleNext = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     if (index !== null) {
-      setIndex((prev) => (prev === galleryImages.length - 1 ? 0 : prev! + 1));
+      setIndex((prev) => (prev === images.length - 1 ? 0 : prev! + 1));
     }
   };
 
@@ -50,7 +64,7 @@ export default function GalleryClient() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [index]);
+  }, [index, images]);
 
   return (
     <div className="py-24 md:py-36 bg-[#121212]">
@@ -69,7 +83,7 @@ export default function GalleryClient() {
 
         {/* Interactive Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-          {galleryImages.map((src, idx) => {
+          {images.map((src, idx) => {
             const layout = EDITORIAL_GRID_LAYOUTS[idx] || { colClass: "col-span-1 h-[160px]" };
             return (
               <motion.div

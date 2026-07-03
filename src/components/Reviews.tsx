@@ -1,16 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Star, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
-import { googleReviews } from "@/lib/reviews";
+import { googleReviews, Review } from "@/lib/reviews";
 import Button from "./Button";
 
 export default function Reviews() {
   const [isPaused, setIsPaused] = useState(false);
+  const [reviews, setReviews] = useState<Review[]>(googleReviews);
+
+  useEffect(() => {
+    async function fetchReviews() {
+      try {
+        const { getReviews } = await import("@/lib/sanity-data");
+        const data = await getReviews();
+        setReviews(data);
+      } catch (err) {
+        console.error("Error loading reviews:", err);
+      }
+    }
+    fetchReviews();
+  }, []);
 
   // Duplicate the reviews array to ensure seamless infinite loop scrolling
-  const duplicatedReviews = [...googleReviews, ...googleReviews, ...googleReviews];
+  const duplicatedReviews = [...reviews, ...reviews, ...reviews];
+
 
   return (
     <section id="reviews" className="py-24 md:py-36 bg-[#0B0B0B] border-b border-luxury-border overflow-hidden">
