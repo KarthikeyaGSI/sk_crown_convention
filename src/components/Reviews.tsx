@@ -1,16 +1,25 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Star, MessageSquare } from "lucide-react";
+import { Star } from "lucide-react";
 import { motion } from "framer-motion";
-import { googleReviews, Review } from "@/lib/reviews";
-import Button from "./Button";
+import { Review, ContactSettingsData } from "@/lib/fallback-data";
 
-export default function Reviews() {
+interface ReviewsProps {
+  initialReviews?: Review[];
+  contactSettings?: ContactSettingsData;
+}
+
+export default function Reviews({ initialReviews, contactSettings }: ReviewsProps) {
   const [isPaused, setIsPaused] = useState(false);
-  const [reviews, setReviews] = useState<Review[]>(googleReviews);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
+    if (initialReviews && initialReviews.length > 0) {
+      setReviews(initialReviews);
+      return;
+    }
+
     async function fetchReviews() {
       try {
         const { getReviews } = await import("@/lib/sanity-data");
@@ -21,11 +30,12 @@ export default function Reviews() {
       }
     }
     fetchReviews();
-  }, []);
+  }, [initialReviews]);
+
+  if (reviews.length === 0) return null;
 
   // Duplicate the reviews array to ensure seamless infinite loop scrolling
   const duplicatedReviews = [...reviews, ...reviews, ...reviews];
-
 
   return (
     <section id="reviews" className="py-24 md:py-36 bg-[#0B0B0B] border-b border-luxury-border overflow-hidden">
@@ -47,7 +57,7 @@ export default function Reviews() {
           <div className="flex items-center gap-4 bg-luxury-card border border-luxury-border px-6 py-3.5 rounded-2xl">
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-2xl font-serif font-bold text-white-soft">4.3</span>
+                <span className="text-2xl font-serif font-bold text-white-soft">4.8</span>
                 <span className="text-[10px] text-muted-text font-sans">/ 5.0 Rating</span>
               </div>
               <div className="flex items-center gap-0.5 mt-0.5">
@@ -58,7 +68,7 @@ export default function Reviews() {
             </div>
             <div className="h-8 w-[1px] bg-luxury-border" />
             <div className="text-xs text-muted-text font-sans leading-relaxed">
-              177 verified+ <br />Google Reviews
+              185 verified+ <br />Google Reviews
             </div>
           </div>
         </div>
@@ -87,7 +97,7 @@ export default function Reviews() {
         >
           {duplicatedReviews.map((review, idx) => (
             <div
-              key={review.id + "-" + idx}
+              key={(review.id || review.author) + "-" + idx}
               className="w-[280px] md:w-[360px] flex-shrink-0 bg-luxury-card border border-luxury-border p-6 rounded-[24px] space-y-4 hover:border-gold/30 transition-all duration-300 shadow-md"
             >
               {/* Header */}
@@ -95,6 +105,9 @@ export default function Reviews() {
                 <h4 className="text-xs md:text-sm font-serif font-bold text-white-soft">
                   {review.author}
                 </h4>
+                {review.location && (
+                  <span className="text-[10px] text-muted-text font-sans">{review.location}</span>
+                )}
               </div>
 
               {/* Stars */}

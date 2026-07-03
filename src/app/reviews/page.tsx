@@ -3,6 +3,9 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Reviews from "@/components/Reviews";
+import { getSiteSettings, getContactSettings, getReviews } from "@/lib/sanity-data";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Guest Reviews | SK Crown Convention Hall A/c",
@@ -10,15 +13,19 @@ export const metadata: Metadata = {
   keywords: ["SK Crown Reviews", "Google Reviews Warangal", "Customer Testimonials"],
 };
 
-export default function ReviewsPage() {
+export default async function ReviewsPage() {
+  const siteSettings = await getSiteSettings();
+  const contactSettings = await getContactSettings();
+  const reviews = await getReviews();
+
   return (
     <div className="min-h-screen bg-luxury-bg text-white-soft flex flex-col font-sans">
-      <Navbar />
+      <Navbar siteSettings={siteSettings} contactSettings={contactSettings} />
       <main className="flex-grow pt-[var(--navbar-height)]">
         {/* Reviews testimonial marquee and verification summary */}
-        <Reviews />
+        <Reviews initialReviews={reviews} contactSettings={contactSettings} />
       </main>
-      <Footer />
+      <Footer siteSettings={siteSettings} contactSettings={contactSettings} />
     </div>
   );
 }

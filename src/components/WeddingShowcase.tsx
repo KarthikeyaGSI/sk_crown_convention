@@ -1,30 +1,58 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { weddingShowcaseImages, shimmerBlurDataUrl } from "@/lib/images";
+import { ShowcaseEventData } from "@/lib/sanity-data";
 
-export default function WeddingShowcase() {
+interface WeddingShowcaseProps {
+  initialEvents?: ShowcaseEventData[];
+}
+
+export default function WeddingShowcase({ initialEvents }: WeddingShowcaseProps) {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [events, setEvents] = useState<Array<{ src: string; title: string; description: string }>>(weddingShowcaseImages);
+  const [events, setEvents] = useState<Array<{ src: string; title: string; description: string }>>([]);
 
   useEffect(() => {
+    if (initialEvents && initialEvents.length > 0) {
+      setEvents(
+        initialEvents.map((e) => ({
+          src: e.imageUrl,
+          title: e.title,
+          description: `${e.description}${e.theme ? ` | Theme: ${e.theme}` : ""}${
+            e.capacity ? ` | Guest Capacity: ${e.capacity}` : ""
+          }`,
+        }))
+      );
+      return;
+    }
+
     async function fetchEvents() {
       try {
         const { getShowcaseEvents } = await import("@/lib/sanity-data");
         const data = await getShowcaseEvents();
-        setEvents(data);
+        setEvents(
+          data.map((e) => ({
+            src: e.imageUrl,
+            title: e.title,
+            description: `${e.description}${e.theme ? ` | Theme: ${e.theme}` : ""}${
+              e.capacity ? ` | Guest Capacity: ${e.capacity}` : ""
+            }`,
+          }))
+        );
       } catch (err) {
         console.error("Error loading showcase events:", err);
+        setEvents(weddingShowcaseImages);
       }
     }
     fetchEvents();
-  }, []);
+  }, [initialEvents]);
 
   // Safety bounds check
   const activeEvent = events[activeIdx] || events[0] || weddingShowcaseImages[0];
+
+  if (events.length === 0) return null;
 
   return (
     <section id="showcase" className="py-20 md:py-36 bg-[#0B0B0B] border-b border-luxury-border">

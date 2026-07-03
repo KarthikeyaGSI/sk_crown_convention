@@ -3,10 +3,22 @@
 import React from "react";
 import { MapPin, Phone, Clock, Compass } from "lucide-react";
 import { motion } from "framer-motion";
-import { VENUE_DETAILS } from "@/lib/constants";
+import { ContactSettingsData } from "@/lib/fallback-data";
 import Button from "./Button";
 
-export default function VisitInfo() {
+interface VisitInfoProps {
+  contactSettings?: ContactSettingsData;
+}
+
+export default function VisitInfo({ contactSettings }: VisitInfoProps) {
+  const contact = contactSettings || {
+    address: "Sk crown Mulug Road, Near Hp Petrol Station, Hanuman Junction, Warangal, India 506006",
+    phone: "+91 7070709661, +91 7900775577",
+    email: "skcrown700@gmail.com",
+    openingHours: "Open 24/7 for Bookings & Events",
+    googleMapsLink: "https://maps.app.goo.gl/EVGcvP6fjXupsRUd6",
+  };
+
   return (
     <section id="visit" className="py-32 md:py-48 bg-[#0B0B0B] border-b border-luxury-border">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -24,14 +36,16 @@ export default function VisitInfo() {
             <p className="text-base md:text-lg text-muted-text font-sans font-light leading-relaxed">
               We welcome private venue tours. Located in a prime corridor of Warangal, SK Crown Convention is easily accessible from any part of the city. Schedule a walkthrough with our site managers to plan your seating and layout.
             </p>
-            <div className="pt-4">
-              <Button
-                variant="primary"
-                onClick={() => window.open(VENUE_DETAILS.googleMapsLink, "_blank")}
-              >
-                Get Directions <Compass className="w-4 h-4 ml-1.5" />
-              </Button>
-            </div>
+            {contact.googleMapsLink && (
+              <div className="pt-4">
+                <Button
+                  variant="primary"
+                  onClick={() => window.open(contact.googleMapsLink, "_blank")}
+                >
+                  Get Directions <Compass className="w-4 h-4 ml-1.5" />
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Right Info List (Minimalist Editorial Layout) */}
@@ -51,7 +65,7 @@ export default function VisitInfo() {
                   Address
                 </h3>
                 <p className="text-sm text-white-soft font-sans font-light leading-relaxed">
-                  {VENUE_DETAILS.address}
+                  {contact.address}
                 </p>
               </div>
             </motion.div>
@@ -71,31 +85,33 @@ export default function VisitInfo() {
                   Contacts
                 </h3>
                 <p className="text-sm text-white-soft font-sans font-light leading-relaxed">
-                  {VENUE_DETAILS.phone} <br />
-                  {VENUE_DETAILS.email}
+                  {contact.phone} <br />
+                  {contact.email}
                 </p>
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex gap-6 items-start pt-8"
-            >
-              <div className="p-3 bg-luxury-card border border-luxury-border rounded-full text-gold">
-                <Clock className="w-5 h-5" />
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-xs uppercase tracking-wider font-serif font-bold text-gold">
-                  Operating Hours
-                </h3>
-                <p className="text-sm text-white-soft font-sans font-light leading-relaxed">
-                  {VENUE_DETAILS.hours}
-                </p>
-              </div>
-            </motion.div>
+            {contact.openingHours && (
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="flex gap-6 items-start pt-8"
+              >
+                <div className="p-3 bg-luxury-card border border-luxury-border rounded-full text-gold">
+                  <Clock className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-xs uppercase tracking-wider font-serif font-bold text-gold">
+                    Operating Hours
+                  </h3>
+                  <p className="text-sm text-white-soft font-sans font-light leading-relaxed">
+                    {contact.openingHours}
+                  </p>
+                </div>
+              </motion.div>
+            )}
           </div>
 
         </div>

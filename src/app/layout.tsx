@@ -15,56 +15,47 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://skcrown.com"),
-  title: {
-    default: "SK Crown Convention Hall A/c",
-    template: "%s | SK Crown Convention Hall A/c",
-  },
-  description: "Luxury wedding venue in Warangal for weddings, receptions, engagements, corporate events and unforgettable celebrations.",
-  keywords: [
-    "SK Crown Convention Hall A/c",
-    "Wedding Venue Mulug Road Warangal",
-    "Marriage Hall Hanuman Junction",
-    "Luxury Banquet Hall Warangal",
-    "AC Convention Hall Telangana",
-    "Hanuman Junction Function Hall"
-  ],
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
-  manifest: "/site.webmanifest",
-  openGraph: {
-    title: "SK Crown Convention Hall A/c | Luxury Wedding Venue in Warangal",
-    description: "Celebrate weddings, receptions, engagements and corporate events at SK Crown Convention Hall A/c, one of the finest luxury wedding venues on Mulug Road, Warangal.",
-    url: "https://skcrown.com",
-    siteName: "SK Crown Convention Hall A/c",
-    locale: "en_IN",
-    type: "website",
-    images: [
-      {
-        url: "/images/logo.png",
-        width: 800,
-        height: 600,
-        alt: "SK Crown Convention Hall A/c Logo",
-      }
-    ]
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "SK Crown Convention Hall A/c | Luxury Wedding Venue in Warangal",
-    description: "Celebrate weddings, receptions, engagements and corporate events at SK Crown Convention Hall A/c, one of the finest luxury wedding venues on Mulug Road, Warangal.",
-    images: ["/images/logo.png"],
-  }
-};
+import { getSiteSettings, getSeoSettings } from "@/lib/sanity-data";
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeoSettings();
+  const url = seo.canonicalBaseUrl || "https://skcrown.com";
+  return {
+    metadataBase: new URL(url),
+    title: {
+      default: seo.defaultTitle,
+      template: `%s | ${seo.defaultTitle}`,
+    },
+    description: seo.defaultDescription,
+    robots: seo.robots || "index, follow",
+    openGraph: {
+      title: seo.defaultTitle,
+      description: seo.defaultDescription,
+      url: url,
+      siteName: seo.defaultTitle,
+      locale: "en_IN",
+      type: "website",
+      images: seo.ogImageUrl ? [{ url: seo.ogImageUrl, alt: seo.defaultTitle }] : [{ url: "/images/logo.png" }]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo.defaultTitle,
+      description: seo.defaultDescription,
+      images: seo.ogImageUrl ? [seo.ogImageUrl] : ["/images/logo.png"],
+    }
+  };
+}
+
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteSettings = await getSiteSettings();
+  const seo = await getSeoSettings();
+  const favicon = siteSettings.faviconUrl || "/images/logo.png";
+
   return (
     <html
       lang="en"
@@ -72,10 +63,19 @@ export default function RootLayout({
     >
       <head>
         {/* Favicon Logo links for title bar tab branding */}
-        <link rel="icon" href="/images/logo.png" />
-        <link rel="shortcut icon" href="/images/logo.png" />
-        <link rel="apple-touch-icon" href="/images/logo.png" />
+        <link rel="icon" href={favicon} />
+        <link rel="shortcut icon" href={favicon} />
+        <link rel="apple-touch-icon" href={favicon} />
+        
+        {seo.schemaMarkup && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: seo.schemaMarkup }}
+          />
+        )}
+        
         {/* Google Tag Manager head script */}
+
         <Script
           id="gtm-script"
           strategy="afterInteractive"

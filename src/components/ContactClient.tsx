@@ -3,11 +3,28 @@
 import React, { useState } from "react";
 import { Calendar, Users, FileText, CheckCircle2, ChevronRight, ChevronLeft, Phone, Mail, MapPin } from "lucide-react";
 import Button from "@/components/Button";
-import { VENUE_DETAILS } from "@/lib/constants";
+import { ContactSettingsData } from "@/lib/fallback-data";
 
 const EVENT_TYPES = ["Wedding", "Reception", "Corporate", "Birthday", "Engagement", "Other"];
 
-export default function ContactClient() {
+interface ContactClientProps {
+  contactSettings?: ContactSettingsData;
+}
+
+export default function ContactClient({ contactSettings }: ContactClientProps) {
+  const rawPhone = contactSettings?.whatsApp 
+    ? contactSettings.whatsApp.replace(/[^0-9]/g, "")
+    : (contactSettings?.phone ? contactSettings.phone.replace(/[^0-9]/g, "") : "");
+  const cleanWhatsApp = rawPhone.length > 10 ? rawPhone : (rawPhone ? `91${rawPhone}` : "");
+  const whatsappNum = cleanWhatsApp || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917070709661";
+
+  const contact = contactSettings || {
+    phone: "+91 7070709661, +91 7900775577",
+    email: "skcrown700@gmail.com",
+    address: "Sk crown Mulug Road, Near Hp Petrol Station, Hanuman Junction, Warangal, India 506006",
+  };
+
+
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -185,7 +202,7 @@ Please let me know the availability.
 
 Thank you.`;
 
-        const whatsappNum = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917070709661";
+        // Using dynamic component-scoped whatsappNum
         window.location.href = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(waMessage)}`;
       } else {
         setSubmitError(result.message || "We couldn't submit your enquiry.");
@@ -220,20 +237,20 @@ Thank you.`;
           <div className="space-y-6 pt-4 border-t border-luxury-border/50">
             <div className="flex gap-4 items-center">
               <Phone className="w-4 h-4 text-gold flex-shrink-0" />
-              <a href={`tel:${VENUE_DETAILS.phoneRaw}`} className="text-sm text-white-soft hover:text-gold transition-colors font-light font-sans">
-                {VENUE_DETAILS.phone}
+              <a href={`tel:${cleanWhatsApp || "917070709661"}`} className="text-sm text-white-soft hover:text-gold transition-colors font-light font-sans">
+                {contact.phone}
               </a>
             </div>
             <div className="flex gap-4 items-center">
               <Mail className="w-4 h-4 text-gold flex-shrink-0" />
-              <a href={`mailto:${VENUE_DETAILS.email}`} className="text-sm text-white-soft hover:text-gold transition-colors font-light font-sans">
-                {VENUE_DETAILS.email}
+              <a href={`mailto:${contact.email}`} className="text-sm text-white-soft hover:text-gold transition-colors font-light font-sans">
+                {contact.email}
               </a>
             </div>
             <div className="flex gap-4 items-center">
               <MapPin className="w-4 h-4 text-gold flex-shrink-0" />
               <span className="text-sm text-white-soft font-light font-sans">
-                {VENUE_DETAILS.address}
+                {contact.address}
               </span>
             </div>
           </div>
@@ -262,7 +279,7 @@ Thank you.`;
                   Try Again
                 </Button>
                 <a
-                  href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917070709661"}`}
+                  href={`https://wa.me/${whatsappNum}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex"

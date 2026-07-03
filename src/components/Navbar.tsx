@@ -5,15 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { NAV_LINKS, VENUE_DETAILS } from "@/lib/constants";
+import { SiteSettingsData, ContactSettingsData } from "@/lib/fallback-data";
 import Button from "./Button";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface NavbarProps {
+  siteSettings: SiteSettingsData;
+  contactSettings: ContactSettingsData;
   onOpenBooking?: () => void;
 }
 
-export default function Navbar({ onOpenBooking }: NavbarProps) {
+export default function Navbar({ siteSettings, contactSettings, onOpenBooking }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -25,6 +27,9 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const logoUrl = siteSettings.logoUrl || "/images/logo.png";
+  const navLinks = siteSettings.navLinks || [];
 
   return (
     <>
@@ -43,7 +48,7 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
           >
             <div className="relative w-8 h-8 md:w-10 h-10 overflow-hidden transition-transform duration-300 group-hover:scale-105">
               <Image
-                src="/images/logo.png"
+                src={logoUrl}
                 alt="SK Crown Logo Crest"
                 fill
                 priority
@@ -57,12 +62,14 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
 
           {/* Desktop Navigation Menu */}
           <nav className="hidden lg:flex items-center gap-8">
-            {NAV_LINKS.map((link) => {
-              const isActive = pathname === link.href;
+            {navLinks.map((link) => {
+              const isActive = pathname === link.url;
               return (
                 <Link
                   key={link.label}
-                  href={link.href}
+                  href={link.url}
+                  target={link.openInNewTab ? "_blank" : undefined}
+                  rel={link.openInNewTab ? "noopener noreferrer" : undefined}
                   className="relative text-[11px] uppercase tracking-[0.25em] text-white-soft/80 hover:text-gold font-sans font-medium transition-colors py-2"
                 >
                   {link.label}
@@ -115,10 +122,12 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
             className="fixed top-14 md:top-18 left-0 w-full z-45 lg:hidden bg-[#0B0B0B] border-b border-luxury-border shadow-2xl overflow-hidden"
           >
             <div className="px-6 py-8 flex flex-col gap-5 max-h-[85vh] overflow-y-auto">
-              {NAV_LINKS.map((link) => (
+              {navLinks.map((link) => (
                 <Link
                   key={link.label}
-                  href={link.href}
+                  href={link.url}
+                  target={link.openInNewTab ? "_blank" : undefined}
+                  rel={link.openInNewTab ? "noopener noreferrer" : undefined}
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-xs uppercase tracking-[0.2em] font-sans text-white-soft/80 hover:text-gold transition-colors block border-b border-luxury-border/30 pb-2"
                 >
@@ -145,7 +154,7 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
                   </Link>
                 )}
                 <div className="text-center text-[10px] text-muted-text font-sans tracking-wide">
-                  {VENUE_DETAILS.phone} • {VENUE_DETAILS.location}
+                  {contactSettings.phone} • {contactSettings.address.split(",").slice(-2).join(",").trim()}
                 </div>
               </div>
             </div>

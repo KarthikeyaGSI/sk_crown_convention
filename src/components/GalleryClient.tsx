@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { galleryImages, shimmerBlurDataUrl } from "@/lib/images";
+import { GalleryImageData } from "@/lib/sanity-data";
 
 const EDITORIAL_GRID_LAYOUTS = [
   { colClass: "col-span-2 md:col-span-4 h-[220px] md:h-[600px]" },
@@ -21,22 +22,32 @@ const EDITORIAL_GRID_LAYOUTS = [
   { colClass: "col-span-1 md:col-span-2 h-[160px] md:h-[450px]" },
 ];
 
-export default function GalleryClient() {
+interface GalleryClientProps {
+  initialImages?: GalleryImageData[];
+}
+
+export default function GalleryClient({ initialImages }: GalleryClientProps) {
   const [index, setIndex] = useState<number | null>(null);
-  const [images, setImages] = useState<string[]>(galleryImages);
+  const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
+    if (initialImages && initialImages.length > 0) {
+      setImages(initialImages.map((img) => img.imageUrl));
+      return;
+    }
+
     async function fetchImages() {
       try {
         const { getGalleryImages } = await import("@/lib/sanity-data");
         const data = await getGalleryImages();
-        setImages(data);
+        setImages(data.map((img) => img.imageUrl));
       } catch (err) {
         console.error("Error loading gallery images:", err);
+        setImages(galleryImages);
       }
     }
     fetchImages();
-  }, []);
+  }, [initialImages]);
 
   const handlePrev = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -65,6 +76,8 @@ export default function GalleryClient() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [index, images]);
+
+  if (images.length === 0) return null;
 
   return (
     <div className="py-24 md:py-36 bg-[#121212]">
@@ -125,7 +138,7 @@ export default function GalleryClient() {
             {/* Top Close Bar */}
             <div className="flex justify-between items-center z-10">
               <span className="text-xs uppercase tracking-widest text-gold font-sans">
-                Image {index + 1} of {galleryImages.length}
+                Image {index + 1} of {images.length}
               </span>
               <button
                 onClick={handleClose}
@@ -158,7 +171,7 @@ export default function GalleryClient() {
                   className="relative w-full h-full"
                 >
                   <Image
-                    src={galleryImages[index]}
+                    src={images[index]}
                     alt={`SK Crown Lightbox Image ${index + 1}`}
                     fill
                     sizes="100vw"

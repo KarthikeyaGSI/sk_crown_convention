@@ -3,6 +3,9 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import VenueStory from "@/components/VenueStory";
+import { getSiteSettings, getHomepage, getContactSettings } from "@/lib/sanity-data";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "About Us | SK Crown Convention Hall A/c",
@@ -10,15 +13,19 @@ export const metadata: Metadata = {
   keywords: ["SK Crown Architecture", "About SK Crown", "Premium Wedding Hall Warangal"],
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const siteSettings = await getSiteSettings();
+  const contactSettings = await getContactSettings();
+  const homepage = await getHomepage();
+
   return (
     <div className="min-h-screen bg-luxury-bg text-white-soft flex flex-col font-sans">
-      <Navbar />
+      <Navbar siteSettings={siteSettings} contactSettings={contactSettings} />
       <main className="flex-grow pt-[var(--navbar-height)]">
         {/* Full Venue Story detailing the architecture */}
-        <VenueStory />
+        <VenueStory homepage={homepage} />
       </main>
-      <Footer />
+      <Footer siteSettings={siteSettings} contactSettings={contactSettings} />
     </div>
   );
 }

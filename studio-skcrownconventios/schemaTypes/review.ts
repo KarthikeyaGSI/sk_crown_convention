@@ -1,9 +1,11 @@
 import { defineType, defineField } from 'sanity'
+import { UserIcon } from '@sanity/icons'
 
 export const review = defineType({
   name: 'review',
   title: 'Customer Review',
   type: 'document',
+  icon: UserIcon,
   fields: [
     defineField({
       name: 'author',
@@ -29,5 +31,46 @@ export const review = defineType({
       type: 'string',
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'verified',
+      title: 'Verified Customer',
+      type: 'boolean',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'featured',
+      title: 'Featured (Show on Homepage)',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'order',
+      title: 'Display Order',
+      type: 'number',
+      initialValue: 0,
+    }),
+    defineField({
+      name: 'googleReviewUrl',
+      title: 'Google Review URL',
+      type: 'url',
+    }),
+    defineField({
+      name: 'avatar',
+      title: 'Author Avatar',
+      type: 'image',
+    }),
+    defineField({
+      name: 'location',
+      title: 'Author Location',
+      type: 'string',
+      description: 'e.g. Bangalore, local guide, etc.',
+    }),
   ],
+  preview: {
+    select: {
+      title: 'author',
+      subtitle: 'content',
+      media: 'avatar',
+    },
+  },
 })

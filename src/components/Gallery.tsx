@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { galleryImages, shimmerBlurDataUrl } from "@/lib/images";
-import { VENUE_DETAILS } from "@/lib/constants";
+import { GalleryImageData } from "@/lib/sanity-data";
+import { HomepageData } from "@/lib/fallback-data";
 import Button from "./Button";
 
 const EDITORIAL_GRID_LAYOUTS = [
@@ -36,21 +36,35 @@ const EDITORIAL_GRID_LAYOUTS = [
   { colClass: "col-span-1 md:col-span-2 h-[160px] md:h-[450px]" },
 ];
 
-export default function Gallery() {
-  const [images, setImages] = useState<string[]>(galleryImages);
+interface GalleryProps {
+  initialImages?: GalleryImageData[];
+  homepage?: HomepageData;
+}
+
+export default function Gallery({ initialImages, homepage }: GalleryProps) {
+  const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
+    if (initialImages && initialImages.length > 0) {
+      setImages(initialImages.map((img) => img.imageUrl));
+      return;
+    }
+
     async function fetchImages() {
       try {
         const { getGalleryImages } = await import("@/lib/sanity-data");
         const data = await getGalleryImages();
-        setImages(data);
+        setImages(data.map((img) => img.imageUrl));
       } catch (err) {
         console.error("Error loading gallery images:", err);
+        setImages(galleryImages);
       }
     }
     fetchImages();
-  }, []);
+  }, [initialImages]);
+
+  const previewTitle = homepage?.galleryPreview?.title || "Explore More Moments";
+  const previewSubtitle = homepage?.galleryPreview?.subtitle || "Moments of Celebration";
 
   return (
     <section id="gallery" className="py-24 md:py-36 bg-[#121212] border-b border-luxury-border">
@@ -59,10 +73,10 @@ export default function Gallery() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 md:mb-24">
           <div className="space-y-4">
             <span className="text-xs uppercase tracking-[0.25em] text-gold font-sans font-semibold">
-              Moments of Celebration
+              {previewSubtitle}
             </span>
             <h2 className="text-3xl md:text-5xl lg:text-[54px] font-serif font-bold text-white-soft leading-tight">
-              Explore More Moments
+              {previewTitle}
             </h2>
             <div className="w-16 h-[1px] bg-gold" />
           </div>

@@ -5,15 +5,23 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Users, FileText, CheckCircle2, ChevronRight, ChevronLeft } from "lucide-react";
 import Button from "./Button";
 import { VENUE_DETAILS } from "@/lib/constants";
+import { ContactSettingsData } from "@/lib/fallback-data";
 
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
+  contactSettings?: ContactSettingsData;
 }
 
 const EVENT_TYPES = ["Wedding", "Reception", "Corporate", "Birthday", "Engagement", "Other"];
 
-export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
+export default function BookingModal({ isOpen, onClose, contactSettings }: BookingModalProps) {
+  const rawPhone = contactSettings?.whatsApp 
+    ? contactSettings.whatsApp.replace(/[^0-9]/g, "")
+    : (contactSettings?.phone ? contactSettings.phone.replace(/[^0-9]/g, "") : "");
+  const cleanWhatsApp = rawPhone.length > 10 ? rawPhone : (rawPhone ? `91${rawPhone}` : "");
+  const whatsappNum = cleanWhatsApp || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917070709661";
+
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -206,7 +214,7 @@ Please let me know the availability.
 
 Thank you.`;
 
-        const whatsappNum = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917070709661";
+        // Using component-scoped whatsappNum
         window.location.href = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(waMessage)}`;
         handleCloseModal();
       } else {
@@ -293,7 +301,7 @@ Thank you.`;
                     Try Again
                   </Button>
                   <a
-                    href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917070709661"}`}
+                    href={`https://wa.me/${whatsappNum}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex"

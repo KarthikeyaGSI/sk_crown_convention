@@ -3,8 +3,10 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Button from "@/components/Button";
-import { VENUE_DETAILS } from "@/lib/constants";
 import { MapPin, Phone, Mail, Clock, ShieldCheck, Compass, Send } from "lucide-react";
+import { getSiteSettings, getContactSettings } from "@/lib/sanity-data";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Plan Your Visit | SK Crown Convention Hall A/c",
@@ -12,16 +14,22 @@ export const metadata: Metadata = {
   keywords: ["SK Crown Directions", "SK Crown Location Map", "Convention Hall Address Warangal"],
 };
 
-export default function VisitPage() {
+export default async function VisitPage() {
+  const siteSettings = await getSiteSettings();
+  const contactSettings = await getContactSettings();
+
   const highlights = [
     { title: "Dedicated Valet Parking", desc: "Secured on-site spaces accommodating up to 500+ premium vehicles." },
     { title: "Highway Accessibility", desc: "Located directly on the highway corridors for easy bus/cab transit." },
     { title: "Prime Landmarks", desc: "Conveniently situated near Mulug Road Hanuman Junction petrol station." },
   ];
 
+  const rawPhone = contactSettings.phone.replace(/[^0-9]/g, "");
+  const primaryPhone = rawPhone.length > 10 ? rawPhone : `91${rawPhone}`;
+
   return (
     <div className="min-h-screen bg-luxury-bg text-white-soft flex flex-col font-sans">
-      <Navbar />
+      <Navbar siteSettings={siteSettings} contactSettings={contactSettings} />
       
       <main className="flex-grow pt-[calc(var(--navbar-height)+3rem)] pb-24 max-w-7xl mx-auto px-6 md:px-12 w-full space-y-16">
         {/* Header */}
@@ -51,18 +59,20 @@ export default function VisitPage() {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
+              {contactSettings.googleMapsLink && (
+                <a
+                  href={contactSettings.googleMapsLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex"
+                >
+                  <Button variant="primary">
+                    Get Directions <Compass className="w-4 h-4 ml-1.5" />
+                  </Button>
+                </a>
+              )}
               <a
-                href={VENUE_DETAILS.googleMapsLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex"
-              >
-                <Button variant="primary">
-                  Get Directions <Compass className="w-4 h-4 ml-1.5" />
-                </Button>
-              </a>
-              <a
-                href={`https://wa.me/${VENUE_DETAILS.phoneRaw}`}
+                href={contactSettings.whatsApp ? contactSettings.whatsApp : `https://wa.me/${primaryPhone}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex"
@@ -85,7 +95,7 @@ export default function VisitPage() {
                     Address Coordinates
                   </h3>
                   <p className="text-sm text-white-soft leading-relaxed font-light">
-                    {VENUE_DETAILS.address}
+                    {contactSettings.address}
                   </p>
                 </div>
               </div>
@@ -97,10 +107,10 @@ export default function VisitPage() {
                     Direct Lines
                   </h3>
                   <a
-                    href={`tel:${VENUE_DETAILS.phoneRaw}`}
+                    href={`tel:${primaryPhone}`}
                     className="text-sm text-white-soft hover:text-gold transition-colors font-light"
                   >
-                    {VENUE_DETAILS.phone}
+                    {contactSettings.phone}
                   </a>
                 </div>
               </div>
@@ -112,25 +122,27 @@ export default function VisitPage() {
                     Electronic Mail
                   </h3>
                   <a
-                    href={`mailto:${VENUE_DETAILS.email}`}
+                    href={`mailto:${contactSettings.email}`}
                     className="text-sm text-white-soft hover:text-gold transition-colors font-light"
                   >
-                    {VENUE_DETAILS.email}
+                    {contactSettings.email}
                   </a>
                 </div>
               </div>
 
-              <div className="flex gap-4 items-start">
-                <Clock className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="text-xs uppercase tracking-wider font-serif font-bold text-gold mb-1">
-                    Availability
-                  </h3>
-                  <p className="text-sm text-white-soft leading-relaxed font-light">
-                    {VENUE_DETAILS.hours}
-                  </p>
+              {contactSettings.openingHours && (
+                <div className="flex gap-4 items-start">
+                  <Clock className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-xs uppercase tracking-wider font-serif font-bold text-gold mb-1">
+                      Availability
+                    </h3>
+                    <p className="text-sm text-white-soft leading-relaxed font-light">
+                      {contactSettings.openingHours}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Travel info highlights */}
@@ -157,7 +169,7 @@ export default function VisitPage() {
         </div>
       </main>
 
-      <Footer />
+      <Footer siteSettings={siteSettings} contactSettings={contactSettings} />
     </div>
   );
 }

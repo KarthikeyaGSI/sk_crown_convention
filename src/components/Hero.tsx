@@ -3,32 +3,83 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { heroImages, shimmerBlurDataUrl } from "@/lib/images";
-import { VENUE_DETAILS } from "@/lib/constants";
+import { shimmerBlurDataUrl } from "@/lib/images";
+import { HeroSlideData, HomepageData } from "@/lib/fallback-data";
 import Button from "./Button";
-import { CalendarRange, ShieldCheck, MapPin, Wind, Hourglass } from "lucide-react";
+import {
+  CalendarRange,
+  ShieldCheck,
+  MapPin,
+  Wind,
+  Hourglass,
+  Users,
+  Car,
+  Heart,
+  Flame,
+  Shield
+} from "lucide-react";
 
 interface HeroProps {
+  heroSlides: HeroSlideData[];
+  homepage: HomepageData;
   onOpenBooking: () => void;
 }
 
-const FEATURE_ICONS = [
-  <CalendarRange className="w-5 h-5 text-gold" key="cap" />,
-  <Hourglass className="w-5 h-5 text-gold" key="247" />,
-  <ShieldCheck className="w-5 h-5 text-gold" key="park" />,
-  <Wind className="w-5 h-5 text-gold" key="ac" />,
-  <MapPin className="w-5 h-5 text-gold" key="loc" />,
-];
+const ICON_MAP: Record<string, React.ReactNode> = {
+  Users: <Users className="w-5 h-5 text-gold" />,
+  Car: <Car className="w-5 h-5 text-gold" />,
+  Heart: <Heart className="w-5 h-5 text-gold" />,
+  Flame: <Flame className="w-5 h-5 text-gold" />,
+  Shield: <Shield className="w-5 h-5 text-gold" />,
+  MapPin: <MapPin className="w-5 h-5 text-gold" />,
+  Wind: <Wind className="w-5 h-5 text-gold" />,
+  CalendarRange: <CalendarRange className="w-5 h-5 text-gold" />,
+  Hourglass: <Hourglass className="w-5 h-5 text-gold" />,
+};
 
-export default function Hero({ onOpenBooking }: HeroProps) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+export default function Hero({ heroSlides, homepage, onOpenBooking }: HeroProps) {
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
   useEffect(() => {
+    if (heroSlides.length <= 1) return;
     const timer = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+      setCurrentImageIndex();
     }, 6000); // 6 seconds crossfade interval
     return () => clearInterval(timer);
-  }, []);
+  }, [heroSlides]);
+
+  const setCurrentImageIndex = () => {
+    setCurrentSlideIndex((prev) => (prev + 1) % heroSlides.length);
+  };
+
+  const activeSlide = heroSlides[currentSlideIndex] || heroSlides[0];
+
+  const getIconElement = (name?: string, index: number = 0) => {
+    if (name && ICON_MAP[name]) return ICON_MAP[name];
+    const defaultIcons = [
+      <Users className="w-5 h-5 text-gold" key="default-users" />,
+      <Hourglass className="w-5 h-5 text-gold" key="default-hg" />,
+      <Car className="w-5 h-5 text-gold" key="default-car" />,
+      <ShieldCheck className="w-5 h-5 text-gold" key="default-shield" />,
+      <MapPin className="w-5 h-5 text-gold" key="default-pin" />,
+    ];
+    return defaultIcons[index % defaultIcons.length];
+  };
+
+  const slides = heroSlides.length > 0 ? heroSlides : [
+    {
+      title: homepage.heroHeading,
+      subtitle: homepage.heroSubheading,
+      description: "Warangal's premier air-conditioned convention center",
+      imageUrl: "/images/sk crown decor main.webp",
+      ctaLabel: homepage.heroCTA.label,
+      ctaLink: homepage.heroCTA.link,
+      secondaryCtaLabel: homepage.heroSecondaryCTA.label,
+      secondaryCtaLink: homepage.heroSecondaryCTA.link,
+    }
+  ];
+
+  const currentSlide = slides[currentSlideIndex] || slides[0];
 
   return (
     <section 
@@ -39,7 +90,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
       <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
         <AnimatePresence mode="popLayout">
           <motion.div
-            key={currentImageIndex}
+            key={currentSlideIndex}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -53,8 +104,8 @@ export default function Hero({ onOpenBooking }: HeroProps) {
               className="relative w-full h-full"
             >
               <Image
-                src={heroImages[currentImageIndex]}
-                alt="SK Crown Convention Venue Background"
+                src={currentSlide.imageUrl}
+                alt={currentSlide.title}
                 fill
                 priority
                 fetchPriority="high"
@@ -90,23 +141,27 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           >
             <span className="h-[1px] w-8 bg-gold/50" />
             <span className="text-xs md:text-sm uppercase tracking-[0.4em] text-gold font-sans font-semibold">
-              {VENUE_DETAILS.name}
+              {currentSlide.subtitle || homepage.heroSubheading}
             </span>
             <span className="h-[1px] w-8 bg-gold/50" />
           </motion.div>
 
           <h1 className="text-4xl md:text-7xl lg:text-[88px] font-serif font-bold text-white-soft leading-[1.05] tracking-tight mb-8">
-            Where Every Celebration <br />
-            <span className="text-gold-soft">Becomes A Lifetime Memory</span>
+            {currentSlide.title.split(" | ")[0]} <br />
+            {currentSlide.title.split(" | ")[1] && (
+              <span className="text-gold-soft">{currentSlide.title.split(" | ")[1]}</span>
+            )}
           </h1>
 
-          <p className="text-base md:text-xl text-muted-text font-sans font-light max-w-2xl mb-12 leading-relaxed">
-            {VENUE_DETAILS.tagline}. Celebrate in luxury on Mulug Road, Warangal, with premium banquets, fully AC halls, and massive parking space.
-          </p>
+          {currentSlide.description && (
+            <p className="text-base md:text-xl text-muted-text font-sans font-light max-w-2xl mb-12 leading-relaxed">
+              {currentSlide.description}
+            </p>
+          )}
 
           <div className="flex flex-col sm:flex-row gap-6">
             <Button variant="primary" onClick={onOpenBooking}>
-              Book Venue Visit
+              {currentSlide.ctaLabel || homepage.heroCTA.label}
             </Button>
             <Button
               variant="secondary"
@@ -116,31 +171,33 @@ export default function Hero({ onOpenBooking }: HeroProps) {
               }}
               showArrow={false}
             >
-              Explore Gallery
+              {currentSlide.secondaryCtaLabel || homepage.heroSecondaryCTA.label}
             </Button>
           </div>
         </motion.div>
       </div>
 
       {/* Centered Slider Indicators */}
-      <div className="absolute bottom-[20vh] left-1/2 -translate-x-1/2 z-20 flex gap-3">
-        {heroImages.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrentImageIndex(idx)}
-            className={`h-1.5 transition-all duration-500 rounded-full cursor-pointer ${
-              idx === currentImageIndex ? "w-8 bg-gold" : "w-2 bg-white/30"
-            }`}
-            aria-label={`Go to slide ${idx + 1}`}
-          />
-        ))}
-      </div>
+      {slides.length > 1 && (
+        <div className="absolute bottom-[20vh] left-1/2 -translate-x-1/2 z-20 flex gap-3">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentSlideIndex(idx)}
+              className={`h-1.5 transition-all duration-500 rounded-full cursor-pointer ${
+                idx === currentSlideIndex ? "w-8 bg-gold" : "w-2 bg-white/30"
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Highlight Strip */}
       <div className="relative z-20 bg-luxury-card border-y border-luxury-border py-10 w-full mt-auto">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-luxury-border">
-            {VENUE_DETAILS.features.map((feature, index) => (
+            {homepage.highlights.map((feature, index) => (
               <motion.div
                 key={feature.title}
                 initial={{ opacity: 0, y: 15 }}
@@ -150,13 +207,13 @@ export default function Hero({ onOpenBooking }: HeroProps) {
                 className="flex flex-col items-center md:items-start text-center md:text-left md:px-6 pt-6 md:pt-0"
               >
                 <div className="p-2.5 rounded-full bg-[#0B0B0B] border border-luxury-border mb-3.5 shadow-sm">
-                  {FEATURE_ICONS[index]}
+                  {getIconElement(feature.icon, index)}
                 </div>
                 <h3 className="text-xs uppercase tracking-[0.2em] font-serif font-bold text-white-soft">
                   {feature.title}
                 </h3>
                 <p className="text-xs text-muted-text font-sans mt-1.5 leading-relaxed max-w-[180px]">
-                  {feature.desc}
+                  {feature.description}
                 </p>
               </motion.div>
             ))}

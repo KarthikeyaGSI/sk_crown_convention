@@ -4,5 +4,6 @@ export default defineCliConfig({
   api: {
     projectId: 'ohlfeqiz',
     dataset: 'production'
-  }
+  },
+  studioHost: 'skcrownconvention'
 })

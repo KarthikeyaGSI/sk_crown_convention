@@ -4,35 +4,45 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { experienceImages, venueImages, shimmerBlurDataUrl } from "@/lib/images";
+import { HomepageData } from "@/lib/fallback-data";
 
-const EDITORIAL_SECTIONS = [
-  {
-    label: "The Arrival",
-    title: "A Grand Welcoming Arrival",
-    desc: "A breathtaking high-ceiling entrance welcoming your guests in absolute grandeur. Crafted to leave a lasting first impression of luxury, setting a majestic tone for your celebration.",
-    image: experienceImages.entrance,
-    imageAlt: "SK Crown Convention Grand Entrance Lobby",
-    align: "left",
-  },
-  {
-    label: "The Dining",
-    title: "Bespoke Gourmet Experiences",
-    desc: "State-of-the-art dining and catering layouts designed to serve bespoke culinary creations. Impeccable white-glove hospitality ensures a seamless and memorable dining experience.",
-    image: experienceImages.dining,
-    imageAlt: "Luxury dining layout at SK Crown Convention",
-    align: "right",
-  },
-  {
-    label: "The Banquet",
-    title: "Spacious & Flexible Seating",
-    desc: "Generous hall configurations offering luxury comfort for up to 3,000 guests. Carefully engineered acoustics and clear sightlines ensure every attendee remains fully connected to the ceremony.",
-    image: venueImages[1],
-    imageAlt: "Spacious seating interior at SK Crown Convention",
-    align: "left",
-  },
-];
+interface ExperienceEditorialProps {
+  homepage?: HomepageData;
+}
 
-export default function ExperienceEditorial() {
+export default function ExperienceEditorial({ homepage }: ExperienceEditorialProps) {
+  const feat = homepage?.featuredExperience;
+
+  const sections = [
+    {
+      label: "Featured Experience",
+      title: feat?.title || "A Grand Welcoming Arrival",
+      desc: feat?.description || "A breathtaking high-ceiling entrance welcoming your guests in absolute grandeur. Crafted to leave a lasting first impression of luxury, setting a majestic tone for your celebration.",
+      image: feat?.imageUrl || experienceImages.entrance,
+      imageAlt: "Featured Experience SK Crown Convention",
+      align: "left",
+      bullets: feat?.bulletPoints || [],
+    },
+    {
+      label: "The Dining",
+      title: "Bespoke Gourmet Experiences",
+      desc: "State-of-the-art dining and catering layouts designed to serve bespoke culinary creations. Impeccable white-glove hospitality ensures a seamless and memorable dining experience.",
+      image: experienceImages.dining,
+      imageAlt: "Luxury dining layout at SK Crown Convention",
+      align: "right",
+      bullets: [],
+    },
+    {
+      label: "The Banquet",
+      title: "Spacious & Flexible Seating",
+      desc: "Generous hall configurations offering luxury comfort for up to 3,000 guests. Carefully engineered acoustics and clear sightlines ensure every attendee remains fully connected to the ceremony.",
+      image: venueImages[1],
+      imageAlt: "Spacious seating interior at SK Crown Convention",
+      align: "left",
+      bullets: [],
+    },
+  ];
+
   return (
     <section id="experience" className="bg-[#121212] border-b border-luxury-border py-32 md:py-48 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-36 md:space-y-48">
@@ -50,7 +60,7 @@ export default function ExperienceEditorial() {
 
         {/* Alternating Sections */}
         <div className="space-y-32 md:space-y-44">
-          {EDITORIAL_SECTIONS.map((section, index) => {
+          {sections.map((section, index) => {
             const isLeft = section.align === "left";
             return (
               <div
@@ -96,9 +106,20 @@ export default function ExperienceEditorial() {
                     {section.title}
                   </h3>
                   <div className="w-10 h-[1px] bg-gold/55" />
-                  <p className="text-base md:text-lg text-muted-text font-sans font-light leading-relaxed">
+                  <p className="text-base md:text-lg text-muted-text font-sans font-light leading-relaxed mb-4">
                     {section.desc}
                   </p>
+                  
+                  {section.bullets.length > 0 && (
+                    <ul className="space-y-2.5 pt-2">
+                      {section.bullets.map((bullet, idx) => (
+                        <li key={idx} className="flex items-start gap-2.5 text-xs text-muted-text font-sans">
+                          <span className="text-gold mt-1">•</span>
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </motion.div>
               </div>
             );
