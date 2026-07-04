@@ -47,5 +47,37 @@ export const seoSettings = defineType({
       type: 'text',
       description: 'Custom global schema markup to inject into the head. Wrap in valid JSON.',
     }),
+    // GEO and FAQ fields
+    defineField({
+      name: 'address',
+      title: 'Address',
+      type: 'string',
+    }),
+    defineField({
+      name: 'phone',
+      title: 'Phone',
+      type: 'string',
+    }),
+    defineField({
+      name: 'latitude',
+      title: 'Latitude',
+      type: 'number',
+    }),
+    defineField({
+      name: 'longitude',
+      title: 'Longitude',
+      type: 'number',
+    }),
+    defineField({
+      name: 'openingHours',
+      title: 'Opening Hours',
+      type: 'string',
+    }),
+    defineField({
+      name: 'faqs',
+      title: 'FAQs',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'faq' }] }],
+    }),
   ],
 })

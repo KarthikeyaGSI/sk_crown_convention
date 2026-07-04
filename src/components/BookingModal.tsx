@@ -146,7 +146,7 @@ export default function BookingModal({ isOpen, onClose, contactSettings }: Booki
 
     setIsSubmitting(true);
     setSubmitError(null);
-    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "6ae2a93a-0823-4a22-9b85-76f325995ef6";
+    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "a9af452f-5be4-412d-91a1-424373a6c242";
 
     const sanitizedPayload = {
       access_key: accessKey,

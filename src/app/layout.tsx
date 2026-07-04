@@ -73,6 +73,38 @@ export default async function RootLayout({
             dangerouslySetInnerHTML={{ __html: seo.schemaMarkup }}
           />
         )}
+        {seo.faqs && seo.faqs.length > 0 && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": seo.faqs.map((f: any) => ({
+                  "@type": "Question",
+                  "name": f.question,
+                  "acceptedAnswer": { "@type": "Answer", "text": f.answer },
+                })),
+              })
+            }}
+          />
+        )}
+        {seo.address && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "LocalBusiness",
+                "name": seo.defaultTitle,
+                "address": { "@type": "PostalAddress", "streetAddress": seo.address },
+                "telephone": seo.phone,
+                "geo": { "@type": "GeoCoordinates", "latitude": seo.latitude, "longitude": seo.longitude },
+                "openingHours": seo.openingHours,
+              })
+            }}
+          />
+        )}
         
         {/* Google Tag Manager head script */}
 
