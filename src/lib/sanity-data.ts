@@ -92,7 +92,13 @@ const SEO_SETTINGS_QUERY = defineQuery(`
     ogImage,
     canonicalBaseUrl,
     robots,
-    schemaMarkup
+    schemaMarkup,
+    address,
+    phone,
+    latitude,
+    longitude,
+    openingHours,
+    faqs[]->{question, answer}
   }
 `);
 
@@ -245,6 +251,12 @@ export async function getSeoSettings(): Promise<SeoSettingsData> {
         canonicalBaseUrl: data.canonicalBaseUrl || fallbackSeoSettings.canonicalBaseUrl,
         robots: data.robots || fallbackSeoSettings.robots,
         schemaMarkup: data.schemaMarkup,
+        address: data.address || fallbackSeoSettings.address,
+        phone: data.phone || fallbackSeoSettings.phone,
+        latitude: data.latitude ?? fallbackSeoSettings.latitude,
+        longitude: data.longitude ?? fallbackSeoSettings.longitude,
+        openingHours: data.openingHours || fallbackSeoSettings.openingHours,
+        faqs: data.faqs || fallbackSeoSettings.faqs,
       };
     }
   } catch (error) {

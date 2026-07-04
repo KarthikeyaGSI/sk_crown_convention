@@ -79,7 +79,14 @@ export interface SeoSettingsData {
   canonicalBaseUrl: string;
   robots?: string;
   schemaMarkup?: string;
+  address?: string;
+  phone?: string;
+  latitude?: number;
+  longitude?: number;
+  openingHours?: string;
+  faqs?: Array<{question: string; answer: string}>;
 }
+
 
 export const fallbackHero = [
   "/images/sk crown decor main.webp",
@@ -299,4 +306,11 @@ export const fallbackSeoSettings: SeoSettingsData = {
   defaultTitle: "SK Crown Convention Hall | Premium Wedding & Event Venue in Warangal",
   defaultDescription: "Host your dream weddings and celebrations at SK Crown Convention. Located on Mulug Road, Warangal. High capacity, Centralized AC, and parking for 500+ cars.",
   canonicalBaseUrl: "https://skcrownconvention.com",
+  // GEO & contact placeholders
+  address: "Sk crown Mulug Road, Near Hp Petrol Station, Hanuman Junction, Warangal, India 506006",
+  phone: "+91 7070709661, +91 7900775577",
+  latitude: 18.0264,
+  longitude: 79.6201,
+  openingHours: "Open 24/7 for Bookings & Events",
+  faqs: [],
 };
