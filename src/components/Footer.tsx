@@ -27,7 +27,8 @@ export default function Footer({ siteSettings, contactSettings }: FooterProps) {
   const devCreditUrl = siteSettings.developerCredit?.url || "https://linktr.ee/karthikeyathallapally";
 
   // Clean raw phone for WhatsApp / Tel link
-  const rawPhone = contactSettings.phone.replace(/[^0-9]/g, "");
+  const firstPhone = contactSettings.phone.split(/[,/]/)[0].trim();
+  const rawPhone = firstPhone.replace(/[^0-9]/g, "");
   const primaryPhone = rawPhone.length > 10 ? rawPhone : `91${rawPhone}`;
 
   return (
@@ -196,15 +197,21 @@ export default function Footer({ siteSettings, contactSettings }: FooterProps) {
                   {contactSettings.address}
                 </span>
               </li>
-              <li className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-gold flex-shrink-0" />
-                <a
-                  href={`tel:${primaryPhone}`}
-                  className="text-xs text-muted-text hover:text-gold font-sans font-light transition-colors"
-                >
-                  {contactSettings.phone}
-                </a>
-              </li>
+              {contactSettings.phone.split(/[,/]/).map((num, i) => {
+                const cleanNum = num.trim();
+                const telLink = cleanNum.replace(/[^0-9+]/g, "");
+                return (
+                  <li key={i} className="flex items-center gap-3">
+                    <Phone className="w-4 h-4 text-gold flex-shrink-0" />
+                    <a
+                      href={`tel:${telLink}`}
+                      className="text-xs text-muted-text hover:text-gold font-sans font-light transition-colors"
+                    >
+                      {cleanNum}
+                    </a>
+                  </li>
+                );
+              })}
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-gold flex-shrink-0" />
                 <a

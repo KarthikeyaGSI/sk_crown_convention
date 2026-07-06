@@ -25,9 +25,6 @@ export default async function VisitPage() {
     { title: "Prime Landmarks", desc: "Conveniently situated near Mulug Road Hanuman Junction petrol station." },
   ];
 
-  const rawPhone = contactSettings.phone.replace(/[^0-9]/g, "");
-  const primaryPhone = rawPhone.length > 10 ? rawPhone : `91${rawPhone}`;
-
   return (
     <div className="min-h-screen bg-luxury-bg text-white-soft flex flex-col font-sans">
       <Navbar siteSettings={siteSettings} contactSettings={contactSettings} />
@@ -107,12 +104,21 @@ export default async function VisitPage() {
                   <h3 className="text-xs uppercase tracking-wider font-serif font-bold text-gold mb-1">
                     Direct Lines
                   </h3>
-                  <a
-                    href={`tel:${primaryPhone}`}
-                    className="text-sm text-white-soft hover:text-gold transition-colors font-light"
-                  >
-                    {contactSettings.phone}
-                  </a>
+                  <div className="flex flex-col gap-1">
+                    {contactSettings.phone.split(/[,/]/).map((num, i) => {
+                      const cleanNum = num.trim();
+                      const telLink = cleanNum.replace(/[^0-9+]/g, "");
+                      return (
+                        <a
+                          key={i}
+                          href={`tel:${telLink}`}
+                          className="text-sm text-white-soft hover:text-gold transition-colors font-light animate-none"
+                        >
+                          {cleanNum}
+                        </a>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
 

@@ -119,10 +119,10 @@ export default function HomeClient({
       />
 
       {/* Booking Dialog */}
-      <BookingModal 
-        isOpen={isBookingOpen} 
-        onClose={closeBooking} 
-        contactSettings={contactSettings} 
+      <BookingModal
+        isOpen={isBookingOpen}
+        onClose={closeBooking}
+        contactSettings={contactSettings}
         bookingSettings={bookingSettings}
         formSettings={formSettings}
       />

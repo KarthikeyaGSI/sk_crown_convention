@@ -406,7 +406,7 @@ export const fallbackHomepage: HomepageData = {
 };
 
 export const fallbackContactSettings: ContactSettingsData = {
-  phone: "+91 7070709661",
+  phone: "+91 7070709661, +91 7900775577",
   whatsApp: "https://wa.me/917070709661?text=Hello%20SK%20Crown%20Convention%2C%20I%20would%20like%20to%20enquire%20about%20booking%20your%20venue.",
   email: "skcrown700@gmail.com",
   address: "Sk crown Mulug Road, Near Hp Petrol Station, Hanuman Junction, Warangal, India 506006",

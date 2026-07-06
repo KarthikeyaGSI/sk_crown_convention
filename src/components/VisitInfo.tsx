@@ -84,10 +84,20 @@ export default function VisitInfo({ contactSettings }: VisitInfoProps) {
                 <h3 className="text-xs uppercase tracking-wider font-serif font-bold text-gold">
                   Contacts
                 </h3>
-                <p className="text-sm text-white-soft font-sans font-light leading-relaxed">
-                  {contact.phone} <br />
-                  {contact.email}
-                </p>
+                <div className="text-sm text-white-soft font-sans font-light leading-relaxed space-y-1">
+                  {contact.phone.split(/[,/]/).map((num, i) => {
+                    const cleanNum = num.trim();
+                    const telLink = cleanNum.replace(/[^0-9+]/g, "");
+                    return (
+                      <div key={i}>
+                        <a href={`tel:${telLink}`} className="hover:text-gold transition-colors">
+                          {cleanNum}
+                        </a>
+                      </div>
+                    );
+                  })}
+                  <div>{contact.email}</div>
+                </div>
               </div>
             </motion.div>
 

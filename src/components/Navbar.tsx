@@ -30,7 +30,8 @@ export default function Navbar({ siteSettings, contactSettings, onOpenBooking }:
 
   const navLinks = siteSettings.navLinks || [];
   
-  const phoneTel = contactSettings.phone.replace(/[^0-9+]/g, '');
+  const firstPhone = contactSettings.phone.split(/[,/]/)[0].trim();
+  const phoneTel = firstPhone.replace(/[^0-9+]/g, '');
 
   const renderPrimaryCTA = (isMobile = false) => {
     const content = (
@@ -128,7 +129,7 @@ export default function Navbar({ siteSettings, contactSettings, onOpenBooking }:
               className="hidden xl:flex items-center justify-center gap-2 text-white hover:text-gold transition-colors font-sans group whitespace-nowrap shrink-0 flex-none"
             >
               <Phone className="w-5 h-5 text-gold group-hover:text-gold transition-colors" />
-              <span className="font-semibold tracking-wide text-[16px]">{contactSettings.phone}</span>
+              <span className="font-semibold tracking-wide text-[16px]">{firstPhone}</span>
             </a>
           </div>
 
@@ -197,10 +198,16 @@ export default function Navbar({ siteSettings, contactSettings, onOpenBooking }:
               <div className="mt-auto pt-12 pb-8 flex flex-col gap-8">
                 {/* Contact Info in Mobile Menu */}
                 <div className="flex flex-col items-center text-center gap-4 text-sm font-sans text-white-soft/70">
-                  <a href={`tel:${phoneTel}`} className="flex items-center gap-2 hover:text-gold transition-colors font-semibold text-lg text-white group">
-                    <Phone className="w-5 h-5 text-gold group-hover:text-gold" />
-                    {contactSettings.phone}
-                  </a>
+                  {contactSettings.phone.split(/[,/]/).map((num, i) => {
+                    const cleanNum = num.trim();
+                    const telLink = cleanNum.replace(/[^0-9+]/g, "");
+                    return (
+                      <a key={i} href={`tel:${telLink}`} className="flex items-center gap-2 hover:text-gold transition-colors font-semibold text-lg text-white group">
+                        <Phone className="w-5 h-5 text-gold group-hover:text-gold" />
+                        {cleanNum}
+                      </a>
+                    );
+                  })}
                 </div>
 
                 {renderPrimaryCTA(true)}

@@ -12,7 +12,7 @@ export const VENUE_DETAILS = {
   tagline: "Beautiful and spacious Hall For weddings and Events",
   location: "Mulug Road, Warangal",
   address: "Sk crown Mulug Road, Near Hp Petrol Station, Hanuman Junction, Warangal, India 506006",
-  phone: "+91 7070709661",
+  phone: "+91 7070709661, +91 7900775577",
   phoneRaw: "917070709661", // primary callback number
   email: "skcrown700@gmail.com",
   instagram: "https://www.instagram.com/skcrownconvention",

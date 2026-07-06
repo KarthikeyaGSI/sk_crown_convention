@@ -14,7 +14,6 @@ interface ContactClientProps {
 
 export default function ContactClient({ contactSettings }: ContactClientProps) {
   const whatsappNum = getWhatsAppNumber(contactSettings?.whatsApp, contactSettings?.phone);
-  const cleanWhatsApp = whatsappNum;
 
   const contact = contactSettings || {
     phone: "+91 7070709661",
@@ -233,12 +232,20 @@ Thank you.`;
           </div>
 
           <div className="space-y-6 pt-4 border-t border-luxury-border/50">
-            <div className="flex gap-4 items-center">
-              <Phone className="w-4 h-4 text-gold flex-shrink-0" />
-              <a href={`tel:${cleanWhatsApp || "917070709661"}`} className="text-sm text-white-soft hover:text-gold transition-colors font-light font-sans">
-                {contact.phone}
-              </a>
-            </div>
+             <div className="flex flex-col gap-3">
+               {contact.phone.split(/[,/]/).map((num, i) => {
+                 const cleanNum = num.trim();
+                 const telLink = cleanNum.replace(/[^0-9+]/g, "");
+                 return (
+                   <div key={i} className="flex gap-4 items-center">
+                     <Phone className="w-4 h-4 text-gold flex-shrink-0" />
+                     <a href={`tel:${telLink}`} className="text-sm text-white-soft hover:text-gold transition-colors font-light font-sans">
+                       {cleanNum}
+                     </a>
+                   </div>
+                 );
+               })}
+             </div>
             <div className="flex gap-4 items-center">
               <Mail className="w-4 h-4 text-gold flex-shrink-0" />
               <a href={`mailto:${contact.email}`} className="text-sm text-white-soft hover:text-gold transition-colors font-light font-sans">
