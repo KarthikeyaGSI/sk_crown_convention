@@ -42,11 +42,15 @@ interface GalleryProps {
 }
 
 export default function Gallery({ initialImages, homepage }: GalleryProps) {
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>(() => {
+    if (initialImages && initialImages.length > 0) {
+      return initialImages.map((img) => img.imageUrl);
+    }
+    return [];
+  });
 
   useEffect(() => {
     if (initialImages && initialImages.length > 0) {
-      setImages(initialImages.map((img) => img.imageUrl));
       return;
     }
 
@@ -92,7 +96,7 @@ export default function Gallery({ initialImages, homepage }: GalleryProps) {
         {/* Editorial Layout Asymmetric Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {images.map((src, index) => {
-            const layout = EDITORIAL_GRID_LAYOUTS[index] || { colClass: "col-span-1 h-[160px]" };
+            const layout = EDITORIAL_GRID_LAYOUTS[index % EDITORIAL_GRID_LAYOUTS.length] || { colClass: "col-span-1 h-[160px]" };
             return (
               <motion.div
                 key={src + index}

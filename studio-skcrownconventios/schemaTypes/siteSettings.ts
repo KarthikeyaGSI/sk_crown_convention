@@ -103,5 +103,23 @@ export const siteSettings = defineType({
         defineField({ name: 'url', type: 'string', description: 'Link to developer website' }),
       ],
     }),
+    defineField({
+      name: 'googleAnalyticsId',
+      title: 'Google Analytics 4 ID',
+      type: 'string',
+      description: 'e.g., G-XXXXXXXXXX',
+    }),
+    defineField({
+      name: 'googleTagManagerId',
+      title: 'Google Tag Manager ID',
+      type: 'string',
+      description: 'e.g., GTM-XXXXXXX',
+    }),
+    defineField({
+      name: 'metaPixelId',
+      title: 'Meta Pixel ID',
+      type: 'string',
+      description: 'e.g., 123456789012345',
+    }),
   ],
 })

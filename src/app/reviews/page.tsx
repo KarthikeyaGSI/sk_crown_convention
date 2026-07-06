@@ -23,7 +23,7 @@ export default async function ReviewsPage() {
       <Navbar siteSettings={siteSettings} contactSettings={contactSettings} />
       <main className="flex-grow pt-[var(--navbar-height)]">
         {/* Reviews testimonial marquee and verification summary */}
-        <Reviews initialReviews={reviews} contactSettings={contactSettings} />
+        <Reviews initialReviews={reviews} />
       </main>
       <Footer siteSettings={siteSettings} contactSettings={contactSettings} />
     </div>

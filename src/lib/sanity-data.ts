@@ -9,12 +9,20 @@ import {
   fallbackHomepage,
   fallbackContactSettings,
   fallbackSeoSettings,
+  fallbackBookingSettings,
+  fallbackFormSettings,
+  fallbackVenueHighlights,
+  fallbackAnnouncementBanner,
   Review,
   HeroSlideData,
   SiteSettingsData,
   HomepageData,
   ContactSettingsData,
   SeoSettingsData,
+  BookingSettingsData,
+  FormSettingsData,
+  VenueHighlightsData,
+  AnnouncementBannerData,
 } from "./fallback-data";
 import { defineQuery } from "next-sanity";
 
@@ -35,11 +43,13 @@ const SITE_SETTINGS_QUERY = defineQuery(`
       label,
       url
     },
-    copyrightText,
     developerCredit {
       text,
       url
-    }
+    },
+    googleAnalyticsId,
+    googleTagManagerId,
+    metaPixelId
   }
 `);
 
@@ -47,6 +57,12 @@ const HOMEPAGE_QUERY = defineQuery(`
   *[_type == "homepage"][0] {
     heroHeading,
     heroSubheading,
+    heroVideoWebmUrl,
+    heroVideoMp4Url,
+    heroPoster,
+    heroOverlayOpacity,
+    heroEnabled,
+    heroOrder,
     heroCTA {
       label,
       link
@@ -56,6 +72,8 @@ const HOMEPAGE_QUERY = defineQuery(`
       link
     },
     introSection {
+      enabled,
+      order,
       title,
       text,
       image
@@ -66,6 +84,8 @@ const HOMEPAGE_QUERY = defineQuery(`
       icon
     },
     featuredExperience {
+      enabled,
+      order,
       title,
       subtitle,
       description,
@@ -73,10 +93,14 @@ const HOMEPAGE_QUERY = defineQuery(`
       bulletPoints
     },
     galleryPreview {
+      enabled,
+      order,
       title,
       subtitle
     },
     ctaBanner {
+      enabled,
+      order,
       title,
       subtitle,
       ctaLabel,
@@ -173,12 +197,57 @@ const SHOWCASE_QUERY = defineQuery(`
   }
 `);
 
+const BOOKING_SETTINGS_QUERY = defineQuery(`
+  *[_type == "bookingSettings"][0] {
+    enabled,
+    message,
+    availableSlots
+  }
+`);
+
+const FORM_SETTINGS_QUERY = defineQuery(`
+  *[_type == "formSettings"][0] {
+    successMessage,
+    errorMessage,
+    buttonLabel,
+    whatsAppTemplate,
+    emailSubject
+  }
+`);
+
+const VENUE_HIGHLIGHTS_QUERY = defineQuery(`
+  *[_type == "venueHighlights"][0] {
+    metrics[] {
+      value,
+      label
+    }
+  }
+`);
+
+const ANNOUNCEMENT_BANNER_QUERY = defineQuery(`
+  *[_type == "announcementBanner"][0] {
+    enabled,
+    message
+  }
+`);
+
+const LEGAL_PAGE_QUERY = defineQuery(`
+  *[_type == "legalPage" && slug.current == $slug][0] {
+    title,
+    body,
+    lastUpdated,
+    seoTitle,
+    seoDescription
+  }
+`);
+
 // Helper to safely get image URL
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getImageUrl(imageAsset: any): string | undefined {
   if (!imageAsset) return undefined;
   try {
     return urlFor(imageAsset).url();
-  } catch (e) {
+  } catch {
     return undefined;
   }
 }
@@ -194,10 +263,13 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
         darkLogoUrl: getImageUrl(data.darkLogo),
         faviconUrl: getImageUrl(data.favicon),
         loadingLogoUrl: getImageUrl(data.loadingLogo),
-        navLinks: data.navLinks ? data.navLinks.sort((a: any, b: any) => (a.order || 0) - (b.order || 0)) : fallbackSiteSettings.navLinks,
+        navLinks: data.navLinks ? data.navLinks.sort((a: { order?: number }, b: { order?: number }) => (a.order || 0) - (b.order || 0)) : fallbackSiteSettings.navLinks,
         footerQuickLinks: data.footerQuickLinks || fallbackSiteSettings.footerQuickLinks,
         copyrightText: data.copyrightText || fallbackSiteSettings.copyrightText,
         developerCredit: data.developerCredit || fallbackSiteSettings.developerCredit,
+        googleAnalyticsId: data.googleAnalyticsId,
+        googleTagManagerId: data.googleTagManagerId,
+        metaPixelId: data.metaPixelId,
       };
     }
   } catch (error) {
@@ -208,30 +280,50 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
 
 export async function getHomepage(): Promise<HomepageData> {
   try {
-    console.log("SANITY CLIENT CONFIG:", { projectId: client.config().projectId, dataset: client.config().dataset, useCdn: client.config().useCdn });
     const data = await client.fetch(HOMEPAGE_QUERY, {}, { next: { revalidate: 60, tags: ["homepage"] } });
-    console.log("SANITY HOMEPAGE DATA FETCHED:", data);
     if (data) {
       return {
         heroHeading: data.heroHeading || fallbackHomepage.heroHeading,
         heroSubheading: data.heroSubheading || fallbackHomepage.heroSubheading,
+        heroVideoWebmUrl: data.heroVideoWebmUrl,
+        heroVideoMp4Url: data.heroVideoMp4Url,
+        heroPoster: getImageUrl(data.heroPoster),
+        heroOverlayOpacity: data.heroOverlayOpacity,
+        heroEnabled: data.heroEnabled ?? true,
+        heroOrder: data.heroOrder ?? 1,
         heroCTA: data.heroCTA || fallbackHomepage.heroCTA,
         heroSecondaryCTA: data.heroSecondaryCTA || fallbackHomepage.heroSecondaryCTA,
         introSection: {
+          enabled: data.introSection?.enabled ?? true,
+          order: data.introSection?.order ?? 2,
           title: data.introSection?.title || fallbackHomepage.introSection.title,
           text: data.introSection?.text || fallbackHomepage.introSection.text,
           imageUrl: getImageUrl(data.introSection?.image) || fallbackHomepage.introSection.imageUrl,
         },
         highlights: data.highlights || fallbackHomepage.highlights,
         featuredExperience: {
+          enabled: data.featuredExperience?.enabled ?? true,
+          order: data.featuredExperience?.order ?? 3,
           title: data.featuredExperience?.title || fallbackHomepage.featuredExperience.title,
           subtitle: data.featuredExperience?.subtitle || fallbackHomepage.featuredExperience.subtitle,
           description: data.featuredExperience?.description || fallbackHomepage.featuredExperience.description,
           imageUrl: getImageUrl(data.featuredExperience?.image) || fallbackHomepage.featuredExperience.imageUrl,
           bulletPoints: data.featuredExperience?.bulletPoints || fallbackHomepage.featuredExperience.bulletPoints,
         },
-        galleryPreview: data.galleryPreview || fallbackHomepage.galleryPreview,
-        ctaBanner: data.ctaBanner || fallbackHomepage.ctaBanner,
+        galleryPreview: {
+          enabled: data.galleryPreview?.enabled ?? true,
+          order: data.galleryPreview?.order ?? 4,
+          title: data.galleryPreview?.title || fallbackHomepage.galleryPreview.title,
+          subtitle: data.galleryPreview?.subtitle || fallbackHomepage.galleryPreview.subtitle,
+        },
+        ctaBanner: {
+          enabled: data.ctaBanner?.enabled ?? true,
+          order: data.ctaBanner?.order ?? 5,
+          title: data.ctaBanner?.title || fallbackHomepage.ctaBanner.title,
+          subtitle: data.ctaBanner?.subtitle || fallbackHomepage.ctaBanner.subtitle,
+          ctaLabel: data.ctaBanner?.ctaLabel || fallbackHomepage.ctaBanner.ctaLabel,
+          ctaLink: data.ctaBanner?.ctaLink || fallbackHomepage.ctaBanner.ctaLink,
+        },
       };
     }
   } catch (error) {
@@ -295,7 +387,10 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
   try {
     const data = await client.fetch(HERO_SLIDES_QUERY, {}, { next: { revalidate: 60, tags: ["hero"] } });
     if (data && data.length > 0) {
-      return data.map((slide: any) => ({
+      return data.map((slide: { 
+        title: string; subtitle?: string; description?: string; desktopImage?: unknown; mobileImage?: unknown; 
+        overlayOpacity?: number; ctaLabel?: string; ctaLink?: string; secondaryCtaLabel?: string; secondaryCtaLink?: string; 
+      }) => ({
         title: slide.title,
         subtitle: slide.subtitle,
         description: slide.description,
@@ -319,7 +414,10 @@ export async function getReviews(): Promise<Review[]> {
   try {
     const data = await client.fetch(REVIEWS_QUERY, {}, { next: { revalidate: 60, tags: ["reviews"] } });
     if (data && data.length > 0) {
-      return data.map((r: any) => ({
+      return data.map((r: { 
+        _id: string; author: string; rating: number; content: string; date?: string; 
+        verified?: boolean; featured?: boolean; googleReviewUrl?: string; avatar?: unknown; location?: string; 
+      }) => ({
         id: r._id,
         author: r.author,
         rating: r.rating,
@@ -351,7 +449,7 @@ export async function getGalleryImages(): Promise<GalleryImageData[]> {
   try {
     const data = await client.fetch(GALLERY_QUERY, {}, { next: { revalidate: 60, tags: ["gallery"] } });
     if (data && data.length > 0) {
-      return data.map((img: any) => ({
+      return data.map((img: { _id: string; title?: string; category?: string; image?: unknown; alt?: string; featured?: boolean }) => ({
         id: img._id,
         title: img.title || "Gallery Image",
         category: img.category || "Wedding",
@@ -364,12 +462,12 @@ export async function getGalleryImages(): Promise<GalleryImageData[]> {
     console.error("Failed to fetch gallery images from Sanity, falling back to static data:", error);
   }
   // Convert basic string gallery to array of objects for fallback
-  return fallbackGallery.map((url, index) => ({
+  return fallbackGallery.map((item, index) => ({
     id: `gallery-fallback-${index}`,
-    title: "Gallery Image",
-    category: index % 3 === 0 ? "Wedding" : index % 3 === 1 ? "Reception" : "Dining",
-    imageUrl: url,
-    alt: "SK Crown Convention",
+    title: item.category,
+    category: item.category,
+    imageUrl: item.url,
+    alt: `SK Crown Convention ${item.category}`,
     featured: false,
   }));
 }
@@ -387,7 +485,7 @@ export async function getShowcaseEvents(): Promise<ShowcaseEventData[]> {
   try {
     const data = await client.fetch(SHOWCASE_QUERY, {}, { next: { revalidate: 60, tags: ["showcase"] } });
     if (data && data.length > 0) {
-      return data.map((event: any) => ({
+      return data.map((event: { _id: string; image?: unknown; title: string; description: string; theme?: string; capacity?: string }) => ({
         id: event._id,
         imageUrl: getImageUrl(event.image) || "",
         title: event.title,
@@ -405,4 +503,91 @@ export async function getShowcaseEvents(): Promise<ShowcaseEventData[]> {
     title: event.title,
     description: event.description,
   }));
+}
+
+export async function getBookingSettings(): Promise<BookingSettingsData> {
+  try {
+    const data = await client.fetch(BOOKING_SETTINGS_QUERY, {}, { next: { revalidate: 60, tags: ["bookingSettings"] } });
+    if (data) {
+      return {
+        enabled: data.enabled ?? fallbackBookingSettings.enabled,
+        message: data.message,
+        availableSlots: data.availableSlots || fallbackBookingSettings.availableSlots,
+      };
+    }
+  } catch (error) {
+    console.error("Failed to fetch booking settings:", error);
+  }
+  return fallbackBookingSettings;
+}
+
+export async function getFormSettings(): Promise<FormSettingsData> {
+  try {
+    const data = await client.fetch(FORM_SETTINGS_QUERY, {}, { next: { revalidate: 60, tags: ["formSettings"] } });
+    if (data) {
+      return {
+        successMessage: data.successMessage || fallbackFormSettings.successMessage,
+        errorMessage: data.errorMessage || fallbackFormSettings.errorMessage,
+        buttonLabel: data.buttonLabel || fallbackFormSettings.buttonLabel,
+        whatsAppTemplate: data.whatsAppTemplate || fallbackFormSettings.whatsAppTemplate,
+        emailSubject: data.emailSubject || fallbackFormSettings.emailSubject,
+      };
+    }
+  } catch (error) {
+    console.error("Failed to fetch form settings:", error);
+  }
+  return fallbackFormSettings;
+}
+
+export async function getVenueHighlights(): Promise<VenueHighlightsData> {
+  try {
+    const data = await client.fetch(VENUE_HIGHLIGHTS_QUERY, {}, { next: { revalidate: 60, tags: ["venueHighlights"] } });
+    if (data && data.metrics) {
+      return { metrics: data.metrics };
+    }
+  } catch (error) {
+    console.error("Failed to fetch venue highlights:", error);
+  }
+  return fallbackVenueHighlights;
+}
+
+export async function getAnnouncementBanner(): Promise<AnnouncementBannerData> {
+  try {
+    const data = await client.fetch(ANNOUNCEMENT_BANNER_QUERY, {}, { next: { revalidate: 60, tags: ["announcementBanner"] } });
+    if (data) {
+      return {
+        enabled: data.enabled ?? false,
+        message: data.message,
+      };
+    }
+  } catch (error) {
+    console.error("Failed to fetch announcement banner:", error);
+  }
+  return fallbackAnnouncementBanner;
+}
+
+export interface LegalPageData {
+  title: string;
+  body: unknown;
+  lastUpdated?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+}
+
+export async function getLegalPage(slug: string): Promise<LegalPageData | null> {
+  try {
+    const data = await client.fetch(LEGAL_PAGE_QUERY, { slug }, { next: { revalidate: 3600, tags: ["legalPage"] } });
+    if (data) {
+      return {
+        title: data.title,
+        body: data.body,
+        lastUpdated: data.lastUpdated,
+        seoTitle: data.seoTitle,
+        seoDescription: data.seoDescription,
+      };
+    }
+  } catch (error) {
+    console.error(`Failed to fetch legal page for slug ${slug}:`, error);
+  }
+  return null;
 }

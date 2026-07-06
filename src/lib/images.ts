@@ -65,6 +65,16 @@ export const galleryImages = [
   "/images/sk crown internal.webp",
   "/images/sk crown interior seating.webp",
   "/images/sk crown dining.webp",
+  "/images/sk crown catering team team.webp",
+  "/images/sk crown decor  4.webp",
+  "/images/sk crown decor ___.webp",
+  "/images/sk crown decor main _.webp",
+  "/images/sk crown decor_---.webp",
+  "/images/sk crown main decor.webp",
+  "/images/sk crown main.webp",
+  "/images/sk crown parking 2.webp",
+  "/images/sk crown parking.webp",
+  "/images/sk crown seating.webp",
 ];
 
 export const footerBackground = "/images/sk crown entrance.webp";

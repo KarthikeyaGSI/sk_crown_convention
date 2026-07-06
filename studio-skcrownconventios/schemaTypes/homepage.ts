@@ -14,6 +14,42 @@ export const homepage = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'heroVideoWebmUrl',
+      title: 'Hero Video WebM URL',
+      type: 'string',
+      description: 'e.g., /videos/hero-video-sk-crown.webm',
+    }),
+    defineField({
+      name: 'heroVideoMp4Url',
+      title: 'Hero Video MP4 URL',
+      type: 'string',
+      description: 'e.g., /videos/hero-video-sk-crown.mp4',
+    }),
+    defineField({
+      name: 'heroPoster',
+      title: 'Hero Poster Image',
+      type: 'image',
+      description: 'Shown while video loads',
+    }),
+    defineField({
+      name: 'heroOverlayOpacity',
+      title: 'Hero Overlay Opacity (0-100)',
+      type: 'number',
+      initialValue: 45,
+    }),
+    defineField({
+      name: 'heroEnabled',
+      title: 'Hero Enabled',
+      type: 'boolean',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'heroOrder',
+      title: 'Hero Display Order',
+      type: 'number',
+      initialValue: 1,
+    }),
+    defineField({
       name: 'heroSubheading',
       title: 'Hero Subheading',
       type: 'string',
@@ -42,6 +78,8 @@ export const homepage = defineType({
       title: 'Introduction Section',
       type: 'object',
       fields: [
+        defineField({ name: 'enabled', type: 'boolean', title: 'Enabled', initialValue: true }),
+        defineField({ name: 'order', type: 'number', title: 'Display Order', initialValue: 2 }),
         defineField({ name: 'title', type: 'string', validation: (Rule) => Rule.required() }),
         defineField({ name: 'text', type: 'text', validation: (Rule) => Rule.required() }),
         defineField({ name: 'image', type: 'image', validation: (Rule) => Rule.required() }),
@@ -67,6 +105,8 @@ export const homepage = defineType({
       title: 'Featured Experience Section',
       type: 'object',
       fields: [
+        defineField({ name: 'enabled', type: 'boolean', title: 'Enabled', initialValue: true }),
+        defineField({ name: 'order', type: 'number', title: 'Display Order', initialValue: 3 }),
         defineField({ name: 'title', type: 'string', validation: (Rule) => Rule.required() }),
         defineField({ name: 'subtitle', type: 'string' }),
         defineField({ name: 'description', type: 'text', validation: (Rule) => Rule.required() }),
@@ -84,6 +124,8 @@ export const homepage = defineType({
       title: 'Gallery Preview Section',
       type: 'object',
       fields: [
+        defineField({ name: 'enabled', type: 'boolean', title: 'Enabled', initialValue: true }),
+        defineField({ name: 'order', type: 'number', title: 'Display Order', initialValue: 4 }),
         defineField({ name: 'title', type: 'string', validation: (Rule) => Rule.required() }),
         defineField({ name: 'subtitle', type: 'string' }),
       ],
@@ -93,11 +135,20 @@ export const homepage = defineType({
       title: 'Call To Action Banner',
       type: 'object',
       fields: [
+        defineField({ name: 'enabled', type: 'boolean', title: 'Enabled', initialValue: true }),
+        defineField({ name: 'order', type: 'number', title: 'Display Order', initialValue: 5 }),
         defineField({ name: 'title', type: 'string', validation: (Rule) => Rule.required() }),
         defineField({ name: 'subtitle', type: 'string' }),
         defineField({ name: 'ctaLabel', type: 'string', validation: (Rule) => Rule.required() }),
         defineField({ name: 'ctaLink', type: 'string', validation: (Rule) => Rule.required() }),
       ],
+    }),
+    defineField({
+      name: 'storytellingCards',
+      title: 'Premium Storytelling Cards',
+      type: 'array',
+      of: [{ type: 'storytellingCard' }],
+      description: 'Used for the vertical scrolling cinematic section on the homepage.',
     }),
   ],
 })

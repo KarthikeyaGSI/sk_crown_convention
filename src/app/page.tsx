@@ -8,6 +8,8 @@ import {
   getGalleryImages,
   getShowcaseEvents,
   getContactSettings,
+  getBookingSettings,
+  getFormSettings,
 } from "@/lib/sanity-data";
 
 // Revalidation of page configurations
@@ -21,6 +23,8 @@ export default async function Home() {
   const galleryImages = await getGalleryImages();
   const showcaseEvents = await getShowcaseEvents();
   const contactSettings = await getContactSettings();
+  const bookingSettings = await getBookingSettings();
+  const formSettings = await getFormSettings();
 
   return (
     <HomeClient
@@ -31,6 +35,8 @@ export default async function Home() {
       galleryImages={galleryImages}
       showcaseEvents={showcaseEvents}
       contactSettings={contactSettings}
+      bookingSettings={bookingSettings}
+      formSettings={formSettings}
     />
   );
 }

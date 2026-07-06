@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { shimmerBlurDataUrl } from "@/lib/images";
+
+import { motion } from "framer-motion";
+
 import { HeroSlideData, HomepageData } from "@/lib/fallback-data";
 import Button from "./Button";
 import {
@@ -40,19 +40,17 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 export default function Hero({ heroSlides, homepage, onOpenBooking }: HeroProps) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
+  const setCurrentImageIndex = React.useCallback(() => {
+    setCurrentSlideIndex((prev) => (prev + 1) % heroSlides.length);
+  }, [heroSlides.length]);
+
   useEffect(() => {
     if (heroSlides.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentImageIndex();
     }, 6000); // 6 seconds crossfade interval
     return () => clearInterval(timer);
-  }, [heroSlides]);
-
-  const setCurrentImageIndex = () => {
-    setCurrentSlideIndex((prev) => (prev + 1) % heroSlides.length);
-  };
-
-  const activeSlide = heroSlides[currentSlideIndex] || heroSlides[0];
+  }, [heroSlides.length, setCurrentImageIndex]);
 
   const getIconElement = (name?: string, index: number = 0) => {
     if (name && ICON_MAP[name]) return ICON_MAP[name];
@@ -86,42 +84,32 @@ export default function Hero({ heroSlides, homepage, onOpenBooking }: HeroProps)
       id="home" 
       className="relative min-h-[calc(100vh-var(--navbar-height))] flex flex-col justify-between pt-[var(--navbar-height)]"
     >
-      {/* Immersive Slideshow Container */}
       <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
-        <AnimatePresence mode="popLayout">
-          <motion.div
-            key={currentSlideIndex}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="absolute inset-0 w-full h-full"
-          >
-            <motion.div
-              initial={{ scale: 1.02 }}
-              animate={{ scale: 1.12 }}
-              transition={{ duration: 15, ease: "linear" }}
-              className="relative w-full h-full"
-            >
-              <Image
-                src={currentSlide.imageUrl}
-                alt={currentSlide.title}
-                fill
-                priority
-                fetchPriority="high"
-                placeholder="blur"
-                blurDataURL={shimmerBlurDataUrl(1920, 1080)}
-                sizes="100vw"
-                className="object-cover"
-              />
-            </motion.div>
-          </motion.div>
-        </AnimatePresence>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster="/images/hero-poster.webp"
+          onLoadedData={() => {
+            if (typeof window !== "undefined") {
+              window.dispatchEvent(new Event("heroVideoReady"));
+            }
+          }}
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/videos/hero-video-sk-crown.webm" type="video/webm" />
+          <source src="/videos/hero-video-sk-crown.mp4" type="video/mp4" />
+        </video>
 
         {/* Enhanced Vignette and Overlays */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,#0B0B0B_95%)] pointer-events-none z-10 opacity-80" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0B0B0B]/95 via-[#0B0B0B]/70 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] via-transparent to-black/40 z-10" />
+        <div 
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{ backgroundColor: `rgba(11, 11, 11, 0.5)` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] via-transparent to-black/40 z-10 pointer-events-none" />
       </div>
 
       {/* Hero Content - Centered Flex Area */}
@@ -177,21 +165,7 @@ export default function Hero({ heroSlides, homepage, onOpenBooking }: HeroProps)
         </motion.div>
       </div>
 
-      {/* Centered Slider Indicators */}
-      {slides.length > 1 && (
-        <div className="absolute bottom-[20vh] left-1/2 -translate-x-1/2 z-20 flex gap-3">
-          {slides.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentSlideIndex(idx)}
-              className={`h-1.5 transition-all duration-500 rounded-full cursor-pointer ${
-                idx === currentSlideIndex ? "w-8 bg-gold" : "w-2 bg-white/30"
-              }`}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
-        </div>
-      )}
+
 
       {/* Highlight Strip */}
       <div className="relative z-20 bg-luxury-card border-y border-luxury-border py-10 w-full mt-auto">

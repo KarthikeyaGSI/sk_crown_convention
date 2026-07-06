@@ -3,20 +3,20 @@
 import React, { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import { motion } from "framer-motion";
-import { Review, ContactSettingsData } from "@/lib/fallback-data";
+import { Review } from "@/lib/fallback-data";
 
 interface ReviewsProps {
   initialReviews?: Review[];
-  contactSettings?: ContactSettingsData;
 }
 
-export default function Reviews({ initialReviews, contactSettings }: ReviewsProps) {
+export default function Reviews({ initialReviews }: ReviewsProps) {
   const [isPaused, setIsPaused] = useState(false);
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviews, setReviews] = useState<Review[]>(() => 
+    initialReviews && initialReviews.length > 0 ? initialReviews : []
+  );
 
   useEffect(() => {
     if (initialReviews && initialReviews.length > 0) {
-      setReviews(initialReviews);
       return;
     }
 
@@ -119,7 +119,7 @@ export default function Reviews({ initialReviews, contactSettings }: ReviewsProp
 
               {/* Review Text */}
               <p className="text-xs md:text-sm text-white-soft/85 font-sans font-light leading-relaxed italic line-clamp-4">
-                "{review.content}"
+                &ldquo;{review.content}&rdquo;
               </p>
             </div>
           ))}
@@ -136,3 +136,4 @@ export default function Reviews({ initialReviews, contactSettings }: ReviewsProp
     </section>
   );
 }
+

@@ -15,7 +15,9 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
-import { getSiteSettings, getSeoSettings } from "@/lib/sanity-data";
+import { getSiteSettings, getSeoSettings, getContactSettings } from "@/lib/sanity-data";
+import Preloader from "@/components/Preloader";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getSeoSettings();
@@ -35,13 +37,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: seo.defaultTitle,
       locale: "en_IN",
       type: "website",
-      images: seo.ogImageUrl ? [{ url: seo.ogImageUrl, alt: seo.defaultTitle }] : [{ url: "/images/logo.png" }]
+      images: seo.ogImageUrl ? [{ url: seo.ogImageUrl, alt: seo.defaultTitle }] : [{ url: "/images/logo.webp" }]
     },
     twitter: {
       card: "summary_large_image",
       title: seo.defaultTitle,
       description: seo.defaultDescription,
-      images: seo.ogImageUrl ? [seo.ogImageUrl] : ["/images/logo.png"],
+      images: seo.ogImageUrl ? [seo.ogImageUrl] : ["/images/logo.webp"],
     }
   };
 }
@@ -54,7 +56,7 @@ export default async function RootLayout({
 }>) {
   const siteSettings = await getSiteSettings();
   const seo = await getSeoSettings();
-  const favicon = siteSettings.faviconUrl || "/images/logo.png";
+  const favicon = siteSettings.faviconUrl || "/images/logo.webp";
 
   return (
     <html
@@ -80,7 +82,7 @@ export default async function RootLayout({
               __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "FAQPage",
-                "mainEntity": seo.faqs.map((f: any) => ({
+                "mainEntity": seo.faqs.map((f: { question: string; answer: string }) => ({
                   "@type": "Question",
                   "name": f.question,
                   "acceptedAnswer": { "@type": "Answer", "text": f.answer },
@@ -116,9 +118,56 @@ export default async function RootLayout({
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-59BVGSPR');`,
+})(window,document,'script','dataLayer','${siteSettings.googleTagManagerId || 'GTM-XXXXXXX'}');`,
           }}
         />
+
+        {/* Google Analytics */}
+        {siteSettings.googleAnalyticsId && (
+          <>
+            <Script
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${siteSettings.googleAnalyticsId}`}
+            />
+            <Script
+              id="google-analytics"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${siteSettings.googleAnalyticsId}', {
+                    page_path: window.location.pathname,
+                  });
+                `,
+              }}
+            />
+          </>
+        )}
+
+        {/* Meta Pixel */}
+        {siteSettings.metaPixelId && (
+          <Script
+            id="meta-pixel"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                !function(f,b,e,v,n,t,s)
+                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s)}(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '${siteSettings.metaPixelId}');
+                fbq('track', 'PageView');
+              `,
+            }}
+          />
+        )}
+
         {/* Microsoft Clarity tag */}
         <Script
           id="clarity-script"
@@ -136,12 +185,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {/* Google Tag Manager (noscript) body tag */}
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-59BVGSPR"
+            src={`https://www.googletagmanager.com/ns.html?id=${siteSettings.googleTagManagerId || 'GTM-XXXXXXX'}`}
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
+
+        {siteSettings.metaPixelId && (
+          <noscript>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img height="1" width="1" style={{ display: 'none' }}
+                 src={`https://www.facebook.com/tr?id=${siteSettings.metaPixelId}&ev=PageView&noscript=1`}
+                 alt="Meta Pixel"
+            />
+          </noscript>
+        )}
+        
+        
+        <Preloader />
+        <FloatingWhatsApp whatsAppUrl={(await getContactSettings()).whatsApp || "https://wa.me/1234567890"} />
+        
         {children}
       </body>
     </html>

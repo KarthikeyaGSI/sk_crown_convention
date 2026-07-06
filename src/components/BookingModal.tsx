@@ -4,18 +4,19 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Users, FileText, CheckCircle2, ChevronRight, ChevronLeft } from "lucide-react";
 import Button from "./Button";
-import { VENUE_DETAILS } from "@/lib/constants";
-import { ContactSettingsData } from "@/lib/fallback-data";
+import { ContactSettingsData, BookingSettingsData, FormSettingsData } from "@/lib/fallback-data";
 
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
   contactSettings?: ContactSettingsData;
+  bookingSettings?: BookingSettingsData;
+  formSettings?: FormSettingsData;
 }
 
 const EVENT_TYPES = ["Wedding", "Reception", "Corporate", "Birthday", "Engagement", "Other"];
 
-export default function BookingModal({ isOpen, onClose, contactSettings }: BookingModalProps) {
+export default function BookingModal({ isOpen, onClose, contactSettings, bookingSettings, formSettings }: BookingModalProps) {
   const rawPhone = contactSettings?.whatsApp 
     ? contactSettings.whatsApp.replace(/[^0-9]/g, "")
     : (contactSettings?.phone ? contactSettings.phone.replace(/[^0-9]/g, "") : "");
@@ -34,8 +35,11 @@ export default function BookingModal({ isOpen, onClose, contactSettings }: Booki
     name: "",
     phone: "",
     email: "",
+    slot: "",
     botcheck: "",
   });
+
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -48,7 +52,7 @@ export default function BookingModal({ isOpen, onClose, contactSettings }: Booki
     setErrors({ ...errors, eventType: "" });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     if (errors[name]) {
@@ -78,11 +82,8 @@ export default function BookingModal({ isOpen, onClose, contactSettings }: Booki
     } else if (currentStep === 2) {
       if (!formData.date) newErrors.date = "Please select a preferred date.";
       
-      const guestCount = parseInt(formData.guests);
       if (!formData.guests) {
-        newErrors.guests = "Please specify the guest count.";
-      } else if (isNaN(guestCount) || guestCount <= 0) {
-        newErrors.guests = "Guest count must be a positive integer.";
+        newErrors.guests = "Please select the guest count.";
       }
 
       if (formData.requirements.length > 500) {
@@ -135,14 +136,21 @@ export default function BookingModal({ isOpen, onClose, contactSettings }: Booki
       name: "",
       phone: "",
       email: "",
+      slot: "",
       botcheck: "",
     });
     setErrors({});
+    setIsSuccess(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateStep(3)) return;
+
+    if (formData.botcheck) {
+      console.warn("Honeypot filled, blocking submission.");
+      return;
+    }
 
     setIsSubmitting(true);
     setSubmitError(null);
@@ -150,7 +158,7 @@ export default function BookingModal({ isOpen, onClose, contactSettings }: Booki
 
     const sanitizedPayload = {
       access_key: accessKey,
-      subject: "New Venue Enquiry",
+      subject: formSettings?.emailSubject || "New Venue Enquiry",
       from_name: sanitizeHTML(formData.name.trim()),
       name: sanitizeHTML(formData.name.trim()),
       email: sanitizeHTML(formData.email.trim()),
@@ -181,52 +189,69 @@ export default function BookingModal({ isOpen, onClose, contactSettings }: Booki
           year: "numeric",
         });
 
-        const waMessage = `Hello SK Crown Convention,
+        let waMessage = formSettings?.whatsAppTemplate || `Hello SK Crown Convention,
 
-I would like to enquire about booking your venue.
+I'd like to enquire about booking your venue.
 
-━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━
 
-🎉 Event Type:
-${formData.eventType}
+Name:
+{{name}}
 
-📅 Preferred Date:
-${formattedDate}
+Phone:
+{{phone}}
 
-👥 Guests:
-${formData.guests}
+Email:
+{{email}}
 
-👤 Name:
-${formData.name.trim()}
+Event Type:
+{{event}}
 
-📞 Phone:
-${formData.phone.trim()}
+Preferred Date:
+{{date}}
 
-📧 Email:
-${formData.email.trim() || "None"}
+Preferred Slot:
+{{slot}}
 
-📝 Additional Requirements:
-${formData.requirements.trim() || "None"}
+Guests:
+{{guestCount}}
 
-━━━━━━━━━━━━━━━━━━━━
+Additional Notes:
+{{message}}
+
+━━━━━━━━━━━━━━━━━━
 
 Please let me know the availability.
 
 Thank you.`;
 
-        // Using component-scoped whatsappNum
-        window.location.href = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(waMessage)}`;
-        handleCloseModal();
+        waMessage = waMessage
+          .replace("{{event}}", formData.eventType)
+          .replace("{{date}}", formattedDate)
+          .replace("{{slot}}", formData.slot || "Any")
+          .replace("{{guestCount}}", formData.guests)
+          .replace("{{name}}", formData.name.trim())
+          .replace("{{phone}}", formData.phone.trim())
+          .replace("{{email}}", formData.email.trim() || "None")
+          .replace("{{message}}", formData.requirements.trim() || "None");
+
+        setIsSuccess(true);
+        setTimeout(() => {
+          window.open(`https://wa.me/${whatsappNum}?text=${encodeURIComponent(waMessage)}`, "_blank", "noopener,noreferrer");
+          handleCloseModal();
+        }, 1000);
       } else {
-        setSubmitError(result.message || "We couldn't submit your enquiry.");
+        setSubmitError(result.message || formSettings?.errorMessage || "We couldn&apos;t submit your enquiry.");
       }
     } catch (err) {
       console.error(err);
-      setSubmitError("Network connectivity failed.");
+      setSubmitError(formSettings?.errorMessage || "Network connectivity failed.");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const bookingEnabled = bookingSettings?.enabled !== false;
 
   return (
     <AnimatePresence>
@@ -267,7 +292,7 @@ Thank you.`;
                 {submitError ? "Enquiry Error" : "Plan Your Celebration"}
               </h2>
               {/* Progress Steps Indicators */}
-              {!submitError && (
+              {!submitError && !isSuccess && bookingEnabled && (
                 <div className="flex gap-2 mt-4">
                   {[1, 2, 3].map((s) => (
                     <div
@@ -281,11 +306,34 @@ Thank you.`;
               )}
             </div>
 
+            {/* Disabled Booking State */}
+            {!bookingEnabled && (
+              <div className="text-center py-8 px-4 border border-gold/20 rounded-xl bg-gold/5 mt-4">
+                <Calendar className="w-8 h-8 text-gold mx-auto mb-3 opacity-80" />
+                <h3 className="text-lg font-serif font-bold text-white-soft mb-2">Bookings Temporarily Closed</h3>
+                <p className="text-sm text-muted-text font-sans">
+                  {bookingSettings?.message || "We are currently not accepting new online bookings. Please contact us directly via phone or WhatsApp for any inquiries."}
+                </p>
+                <a
+                  href={`https://wa.me/${whatsappNum}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex mt-6"
+                >
+                  <Button type="button" variant="primary" showArrow={false}>
+                    Contact via WhatsApp
+                  </Button>
+                </a>
+              </div>
+            )}
+
             {/* Form & Error Panels */}
+            {bookingEnabled && (
+              <>
             {submitError ? (
               <div className="space-y-6 text-center py-6">
                 <p className="text-xs md:text-sm text-muted-text font-sans leading-relaxed">
-                  We couldn't submit your enquiry. <br />
+                  We couldn&apos;t submit your enquiry. <br />
                   Please try again or contact us directly on WhatsApp.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -310,6 +358,18 @@ Thank you.`;
                       Chat on WhatsApp
                     </Button>
                   </a>
+                </div>
+              </div>
+            ) : isSuccess ? (
+              <div className="space-y-6 text-center py-10 animate-fadeIn">
+                <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto" />
+                <div>
+                  <h3 className="text-xl font-serif text-white-soft mb-2">
+                    {formSettings?.successMessage || "✓ Booking Request Sent Successfully"}
+                  </h3>
+                  <p className="text-sm text-muted-text">
+                    Redirecting to WhatsApp to complete your inquiry...
+                  </p>
                 </div>
               </div>
             ) : (
@@ -389,18 +449,49 @@ Thank you.`;
                       )}
                     </div>
 
+                    {bookingSettings?.availableSlots && bookingSettings.availableSlots.length > 0 && (
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] uppercase tracking-widest text-muted-text font-medium flex items-center gap-2">
+                          Preferred Slot
+                        </label>
+                        <select
+                          name="slot"
+                          value={formData.slot}
+                          onChange={handleChange}
+                          className="w-full bg-[#0B0B0B]/50 border border-luxury-border rounded-xl px-4 py-2.5 text-white-soft font-sans text-xs md:text-sm focus:border-gold focus:outline-none transition-colors appearance-none"
+                        >
+                          <option value="">Any time</option>
+                          {bookingSettings.availableSlots.map(slot => (
+                            <option key={slot} value={slot}>{slot}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
                     <div className="space-y-1.5">
                       <label className="text-[10px] uppercase tracking-widest text-muted-text font-medium flex items-center gap-2">
                         <Users className="w-3.5 h-3.5 text-gold" /> Estimated Guest Count
                       </label>
-                      <input
-                        type="number"
+                      <select
                         name="guests"
                         value={formData.guests}
-                        placeholder="e.g. 500"
                         onChange={handleChange}
-                        className="w-full bg-[#0B0B0B]/50 border border-luxury-border rounded-xl px-4 py-2.5 text-white-soft font-sans text-xs md:text-sm focus:border-gold focus:outline-none transition-colors"
-                      />
+                        className="w-full bg-[#0B0B0B]/50 border border-luxury-border rounded-xl px-4 py-2.5 text-white-soft font-sans text-xs md:text-sm focus:border-gold focus:outline-none transition-colors appearance-none"
+                      >
+                        <option value="" disabled>Select Guest Count</option>
+                        {(bookingSettings?.guestCountOptions || [
+                          "Below 100",
+                          "100–250",
+                          "250–500",
+                          "500–750",
+                          "750–1000",
+                          "1000–1500",
+                          "1500–2000",
+                          "More than 2000"
+                        ]).map(opt => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+                      </select>
                       {errors.guests && (
                         <p className="text-[10px] text-red-400 font-sans">{errors.guests}</p>
                       )}
@@ -494,6 +585,7 @@ Thank you.`;
                       <p className="font-semibold text-white-soft mb-1">Reservation Summary</p>
                       <p><span className="text-gold">Event:</span> {formData.eventType}</p>
                       <p><span className="text-gold">Date:</span> {formData.date}</p>
+                      {formData.slot && <p><span className="text-gold">Slot:</span> {formData.slot}</p>}
                       <p><span className="text-gold">Guests:</span> {formData.guests}</p>
                     </div>
                   </div>
@@ -527,11 +619,20 @@ Thank you.`;
                       disabled={isSubmitting}
                       showArrow={true}
                     >
-                      {isSubmitting ? "Sending..." : "Confirm & Book"}
+                      {isSubmitting ? (
+                        <span className="flex items-center gap-2">
+                          <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                          Processing...
+                        </span>
+                      ) : (
+                        formSettings?.buttonLabel || "Confirm & Book"
+                      )}
                     </Button>
                   )}
                 </div>
               </form>
+            )}
+            </>
             )}
           </motion.div>
         </div>
