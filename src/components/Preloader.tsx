@@ -17,11 +17,11 @@ export default function Preloader() {
       sessionStorage.setItem("skcrown-preloader-shown", "true");
 
       const startTime = Date.now();
-      const minDisplayTime = 1200; // Force it to show for at least 1.2s so animation plays
+      const minDisplayTime = 3200; // Force it to show for at least 3.2s so animation plays
       
       const removeTimer = setTimeout(() => {
         setShow(false);
-      }, 2000); // Max 2s
+      }, 4000); // Max 4s
 
       const handleVideoReady = () => {
         const elapsed = Date.now() - startTime;
@@ -74,7 +74,7 @@ export default function Preloader() {
                 initial={{ x: "-100%" }}
                 animate={{ x: "0%" }}
                 transition={{
-                  duration: 1.5,
+                  duration: 3.0,
                   ease: "easeInOut",
                 }}
                 className="w-full h-full bg-gold absolute top-0 left-0"
