@@ -91,7 +91,7 @@ export default function Hero({ heroSlides, homepage, onOpenBooking }: HeroProps)
           loop
           playsInline
           preload="metadata"
-          poster="/images/hero-poster.webp"
+          poster="/images/sk crown main.webp"
           onLoadedData={() => {
             if (typeof window !== "undefined") {
               window.dispatchEvent(new Event("heroVideoReady"));
@@ -99,7 +99,6 @@ export default function Hero({ heroSlides, homepage, onOpenBooking }: HeroProps)
           }}
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src="/videos/hero-video-sk-crown.webm" type="video/webm" />
           <source src="/videos/hero-video-sk-crown.mp4" type="video/mp4" />
         </video>
 

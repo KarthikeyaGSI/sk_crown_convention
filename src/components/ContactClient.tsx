@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Calendar, Users, FileText, CheckCircle2, ChevronRight, ChevronLeft, Phone, Mail, MapPin } from "lucide-react";
 import Button from "@/components/Button";
 import { ContactSettingsData } from "@/lib/fallback-data";
+import { getWhatsAppNumber } from "@/lib/whatsapp";
 
 const EVENT_TYPES = ["Wedding", "Reception", "Corporate", "Birthday", "Engagement", "Other"];
 
@@ -12,11 +13,8 @@ interface ContactClientProps {
 }
 
 export default function ContactClient({ contactSettings }: ContactClientProps) {
-  const rawPhone = contactSettings?.whatsApp 
-    ? contactSettings.whatsApp.replace(/[^0-9]/g, "")
-    : (contactSettings?.phone ? contactSettings.phone.replace(/[^0-9]/g, "") : "");
-  const cleanWhatsApp = rawPhone.length > 10 ? rawPhone : (rawPhone ? `91${rawPhone}` : "");
-  const whatsappNum = cleanWhatsApp || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917070709661";
+  const whatsappNum = getWhatsAppNumber(contactSettings?.whatsApp, contactSettings?.phone);
+  const cleanWhatsApp = whatsappNum;
 
   const contact = contactSettings || {
     phone: "+91 7070709661",

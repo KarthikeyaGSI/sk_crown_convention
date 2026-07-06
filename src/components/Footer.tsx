@@ -7,6 +7,7 @@ import { footerBackground } from "@/lib/images";
 import { SiteSettingsData, ContactSettingsData } from "@/lib/fallback-data";
 import { Mail, Phone, MapPin, ArrowUp, Send } from "lucide-react";
 import { motion } from "framer-motion";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 interface FooterProps {
   siteSettings: SiteSettingsData;
@@ -21,7 +22,6 @@ export default function Footer({ siteSettings, contactSettings }: FooterProps) {
   };
 
   const navLinks = siteSettings.navLinks || [];
-  const logoUrl = siteSettings.logoUrl || "/images/logo.png";
   const copyrightText = siteSettings.copyrightText || "© 2026 SK Crown Convention. All Rights Reserved.";
   const devCreditText = siteSettings.developerCredit?.text || "Digital Experience by MarketingKo";
   const devCreditUrl = siteSettings.developerCredit?.url || "https://linktr.ee/karthikeyathallapally";
@@ -51,17 +51,21 @@ export default function Footer({ siteSettings, contactSettings }: FooterProps) {
           
           {/* Brand/Logo Column */}
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="relative w-8 h-8 overflow-hidden">
+            <Link
+              href="/"
+              aria-label="SK Crown Convention Home"
+              className="flex items-center shrink-0 focus:outline-none group"
+            >
+              <div className="relative shrink-0 flex h-[48px] overflow-hidden max-w-[220px]">
                 <Image
-                  src={logoUrl}
-                  alt="SK Crown Crest logo"
-                  fill
-                  className="object-contain"
+                  src="/images/full-logo.png"
+                  alt="SK Crown Convention Logo"
+                  width={800}
+                  height={250}
+                  className="object-contain h-full w-auto"
                 />
               </div>
-              <h3 className="font-serif text-2xl font-bold tracking-widest text-gold">SK CROWN</h3>
-            </div>
+            </Link>
             <p className="text-xs text-muted-text font-sans font-light leading-relaxed max-w-xs">
               Where celebrations meet luxury hospitality. Warangal&apos;s premier convention venue for weddings, receptions, and corporate galas.
             </p>
@@ -86,31 +90,17 @@ export default function Footer({ siteSettings, contactSettings }: FooterProps) {
                 </motion.a>
               )}
 
-              {contactSettings.whatsApp ? (
-                <motion.a
-                  href={contactSettings.whatsApp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
-                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                  className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
-                  aria-label="WhatsApp"
-                >
-                  <Send className="w-4 h-4" />
-                </motion.a>
-              ) : (
-                <motion.a
-                  href={`https://wa.me/${primaryPhone}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
-                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                  className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
-                  aria-label="WhatsApp"
-                >
-                  <Send className="w-4 h-4" />
-                </motion.a>
-              )}
+              <motion.a
+                href={getWhatsAppLink(contactSettings.whatsApp, contactSettings.phone)}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
+                aria-label="WhatsApp"
+              >
+                <Send className="w-4 h-4" />
+              </motion.a>
 
               {contactSettings.facebook && (
                 <motion.a

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Users, FileText, CheckCircle2, ChevronRight, ChevronLeft } from "lucide-react";
 import Button from "./Button";
 import { ContactSettingsData, BookingSettingsData, FormSettingsData } from "@/lib/fallback-data";
+import { getWhatsAppNumber } from "@/lib/whatsapp";
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -17,11 +18,7 @@ interface BookingModalProps {
 const EVENT_TYPES = ["Wedding", "Reception", "Corporate", "Birthday", "Engagement", "Other"];
 
 export default function BookingModal({ isOpen, onClose, contactSettings, bookingSettings, formSettings }: BookingModalProps) {
-  const rawPhone = contactSettings?.whatsApp 
-    ? contactSettings.whatsApp.replace(/[^0-9]/g, "")
-    : (contactSettings?.phone ? contactSettings.phone.replace(/[^0-9]/g, "") : "");
-  const cleanWhatsApp = rawPhone.length > 10 ? rawPhone : (rawPhone ? `91${rawPhone}` : "");
-  const whatsappNum = cleanWhatsApp || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917070709661";
+  const whatsappNum = getWhatsAppNumber(contactSettings?.whatsApp, contactSettings?.phone);
 
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);

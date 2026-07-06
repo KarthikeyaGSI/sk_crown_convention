@@ -10,9 +10,13 @@ import WeddingShowcase from "@/components/WeddingShowcase";
 import Gallery from "@/components/Gallery";
 import Reviews from "@/components/Reviews";
 import VisitInfo from "@/components/VisitInfo";
-import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
-import BookingModal from "@/components/BookingModal";
+import CTA from "@/components/CTA";
+import dynamic from "next/dynamic";
+
+const BookingModal = dynamic(() => import("@/components/BookingModal"), {
+  ssr: false,
+});
 import {
   SiteSettingsData,
   HomepageData,

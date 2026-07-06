@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, Phone, ArrowRight } from "lucide-react";
 import { SiteSettingsData, ContactSettingsData } from "@/lib/fallback-data";
 import { motion, AnimatePresence } from "framer-motion";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 interface NavbarProps {
   siteSettings: SiteSettingsData;
@@ -175,15 +176,15 @@ export default function Navbar({ siteSettings, contactSettings, onOpenBooking }:
                 >
                   View Gallery
                 </Link>
-                <Link
-                  href={`https://wa.me/${(contactSettings.whatsApp || contactSettings.phone).replace(/[^0-9]/g, '')}`}
+                <a
+                  href={getWhatsAppLink(contactSettings.whatsApp, contactSettings.phone)}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-sm uppercase tracking-[0.2em] font-sans text-white-soft hover:text-gold transition-colors block border-b border-white/5 pb-4"
                 >
                   WhatsApp
-                </Link>
+                </a>
                 <a
                   href={`tel:${phoneTel}`}
                   onClick={() => setMobileMenuOpen(false)}

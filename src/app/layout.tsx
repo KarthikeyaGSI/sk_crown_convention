@@ -18,6 +18,7 @@ const playfair = Playfair_Display({
 import { getSiteSettings, getSeoSettings, getContactSettings } from "@/lib/sanity-data";
 import Preloader from "@/components/Preloader";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getSeoSettings();
@@ -74,6 +75,7 @@ export default async function RootLayout({
 }>) {
   const siteSettings = await getSiteSettings();
   const seo = await getSeoSettings();
+  const contactSettings = await getContactSettings();
   const favicon = siteSettings.faviconUrl || "/images/logo.webp";
   const url = seo.canonicalBaseUrl || "https://skcrown.com";
 
@@ -227,7 +229,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
         
         <Preloader />
-        <FloatingWhatsApp whatsAppUrl={(await getContactSettings()).whatsApp || "https://wa.me/1234567890"} />
+        <FloatingWhatsApp whatsAppUrl={getWhatsAppLink(contactSettings.whatsApp, contactSettings.phone)} />
         
         {children}
       </body>

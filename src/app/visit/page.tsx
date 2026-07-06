@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Button from "@/components/Button";
 import { MapPin, Phone, Mail, Clock, ShieldCheck, Compass, Send } from "lucide-react";
 import { getSiteSettings, getContactSettings } from "@/lib/sanity-data";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 export const revalidate = 60;
 
@@ -72,7 +73,7 @@ export default async function VisitPage() {
                 </a>
               )}
               <a
-                href={contactSettings.whatsApp ? contactSettings.whatsApp : `https://wa.me/${primaryPhone}`}
+                href={getWhatsAppLink(contactSettings.whatsApp, contactSettings.phone)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex"
