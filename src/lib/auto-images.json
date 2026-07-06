@@ -1,0 +1,170 @@
+[
+  {
+    "id": "local-0",
+    "title": "Decor  34",
+    "category": "Wedding Decor",
+    "imageUrl": "/images/sk crown decor  34.webp",
+    "alt": "SK Crown Convention Decor  34",
+    "featured": false
+  },
+  {
+    "id": "local-1",
+    "title": "Decor  4",
+    "category": "Wedding Decor",
+    "imageUrl": "/images/sk crown decor  4.webp",
+    "alt": "SK Crown Convention Decor  4",
+    "featured": false
+  },
+  {
+    "id": "local-2",
+    "title": "Decor",
+    "category": "Wedding Decor",
+    "imageUrl": "/images/sk crown decor  _.webp",
+    "alt": "SK Crown Convention Decor",
+    "featured": false
+  },
+  {
+    "id": "local-3",
+    "title": "Decor 3",
+    "category": "Wedding Decor",
+    "imageUrl": "/images/sk crown decor 3.webp",
+    "alt": "SK Crown Convention Decor 3",
+    "featured": false
+  },
+  {
+    "id": "local-4",
+    "title": "Decor 4",
+    "category": "Wedding Decor",
+    "imageUrl": "/images/sk crown decor 4.webp",
+    "alt": "SK Crown Convention Decor 4",
+    "featured": false
+  },
+  {
+    "id": "local-5",
+    "title": "Decor Main",
+    "category": "Wedding Decor",
+    "imageUrl": "/images/sk crown decor main _.webp",
+    "alt": "SK Crown Convention Decor Main",
+    "featured": false
+  },
+  {
+    "id": "local-6",
+    "title": "Decor Main",
+    "category": "Wedding Decor",
+    "imageUrl": "/images/sk crown decor main.webp",
+    "alt": "SK Crown Convention Decor Main",
+    "featured": false
+  },
+  {
+    "id": "local-7",
+    "title": "Decor",
+    "category": "Wedding Decor",
+    "imageUrl": "/images/sk crown decor __.webp",
+    "alt": "SK Crown Convention Decor",
+    "featured": false
+  },
+  {
+    "id": "local-8",
+    "title": "Decor",
+    "category": "Wedding Decor",
+    "imageUrl": "/images/sk crown decor ___.webp",
+    "alt": "SK Crown Convention Decor",
+    "featured": false
+  },
+  {
+    "id": "local-9",
+    "title": "Decor",
+    "category": "Wedding Decor",
+    "imageUrl": "/images/sk crown decor.webp",
+    "alt": "SK Crown Convention Decor",
+    "featured": false
+  },
+  {
+    "id": "local-10",
+    "title": "Decor",
+    "category": "Wedding Decor",
+    "imageUrl": "/images/sk crown decor_---.webp",
+    "alt": "SK Crown Convention Decor",
+    "featured": false
+  },
+  {
+    "id": "local-11",
+    "title": "Dining",
+    "category": "Dining",
+    "imageUrl": "/images/sk crown dining.webp",
+    "alt": "SK Crown Convention Dining",
+    "featured": false
+  },
+  {
+    "id": "local-12",
+    "title": "Entrance",
+    "category": "Exterior",
+    "imageUrl": "/images/sk crown entrance.webp",
+    "alt": "SK Crown Convention Entrance",
+    "featured": false
+  },
+  {
+    "id": "local-13",
+    "title": "Interior Seating",
+    "category": "Seating",
+    "imageUrl": "/images/sk crown interior seating.webp",
+    "alt": "SK Crown Convention Interior Seating",
+    "featured": false
+  },
+  {
+    "id": "local-14",
+    "title": "Internal",
+    "category": "Interior",
+    "imageUrl": "/images/sk crown internal.webp",
+    "alt": "SK Crown Convention Internal",
+    "featured": false
+  },
+  {
+    "id": "local-15",
+    "title": "Main Decor",
+    "category": "Wedding Decor",
+    "imageUrl": "/images/sk crown main decor.webp",
+    "alt": "SK Crown Convention Main Decor",
+    "featured": false
+  },
+  {
+    "id": "local-16",
+    "title": "Main",
+    "category": "Venue",
+    "imageUrl": "/images/sk crown main.webp",
+    "alt": "SK Crown Convention Main",
+    "featured": false
+  },
+  {
+    "id": "local-17",
+    "title": "Parking 2",
+    "category": "Parking",
+    "imageUrl": "/images/sk crown parking 2.webp",
+    "alt": "SK Crown Convention Parking 2",
+    "featured": false
+  },
+  {
+    "id": "local-18",
+    "title": "Parking",
+    "category": "Parking",
+    "imageUrl": "/images/sk crown parking.webp",
+    "alt": "SK Crown Convention Parking",
+    "featured": false
+  },
+  {
+    "id": "local-19",
+    "title": "Seating",
+    "category": "Seating",
+    "imageUrl": "/images/sk crown seating.webp",
+    "alt": "SK Crown Convention Seating",
+    "featured": false
+  },
+  {
+    "id": "local-20",
+    "title": "Stage",
+    "category": "Stage",
+    "imageUrl": "/images/sk crown stage.webp",
+    "alt": "SK Crown Convention Stage",
+    "featured": false
+  }
+]
