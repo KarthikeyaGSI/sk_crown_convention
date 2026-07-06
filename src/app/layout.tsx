@@ -29,7 +29,22 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${seo.defaultTitle}`,
     },
     description: seo.defaultDescription,
-    robots: seo.robots || "index, follow",
+    robots: {
+      index: true,
+      follow: true,
+      nocache: false,
+      googleBot: {
+        index: true,
+        follow: true,
+        noimageindex: false,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
       title: seo.defaultTitle,
       description: seo.defaultDescription,
@@ -37,13 +52,16 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: seo.defaultTitle,
       locale: "en_IN",
       type: "website",
-      images: seo.ogImageUrl ? [{ url: seo.ogImageUrl, alt: seo.defaultTitle }] : [{ url: "/images/logo.webp" }]
+      images: seo.ogImageUrl ? [{ url: seo.ogImageUrl, alt: seo.defaultTitle }] : [{ url: "/images/logo.webp", alt: seo.defaultTitle }],
     },
     twitter: {
       card: "summary_large_image",
       title: seo.defaultTitle,
       description: seo.defaultDescription,
       images: seo.ogImageUrl ? [seo.ogImageUrl] : ["/images/logo.webp"],
+    },
+    verification: {
+      google: "YOUR_GOOGLE_VERIFICATION_CODE", // Prompting user or leaving placeholder
     }
   };
 }
@@ -57,6 +75,7 @@ export default async function RootLayout({
   const siteSettings = await getSiteSettings();
   const seo = await getSeoSettings();
   const favicon = siteSettings.faviconUrl || "/images/logo.webp";
+  const url = seo.canonicalBaseUrl || "https://skcrown.com";
 
   return (
     <html
@@ -97,12 +116,16 @@ export default async function RootLayout({
             dangerouslySetInnerHTML={{
               __html: JSON.stringify({
                 "@context": "https://schema.org",
-                "@type": "LocalBusiness",
+                "@type": ["EventVenue", "LocalBusiness"],
                 "name": seo.defaultTitle,
-                "address": { "@type": "PostalAddress", "streetAddress": seo.address },
+                "url": url,
+                "image": seo.ogImageUrl || `${url}/images/logo.webp`,
+                "address": { "@type": "PostalAddress", "streetAddress": seo.address, "addressLocality": "Warangal", "addressRegion": "TS", "addressCountry": "IN" },
                 "telephone": seo.phone,
                 "geo": { "@type": "GeoCoordinates", "latitude": seo.latitude, "longitude": seo.longitude },
                 "openingHours": seo.openingHours,
+                "priceRange": "$$",
+                "description": seo.defaultDescription,
               })
             }}
           />
