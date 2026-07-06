@@ -77,7 +77,11 @@ export default function Navbar({ siteSettings, contactSettings, onOpenBooking }:
             aria-label="SK Crown Convention Home"
             className="flex items-center shrink-0 focus:outline-none group"
           >
-            <div className={`relative shrink-0 transition-transform duration-200 group-hover:scale-[1.03] group-hover:drop-shadow-[0_0_12px_rgba(212,175,55,0.4)] flex h-[48px] md:h-[60px] lg:h-[72px]`}>
+            <div className={`relative shrink-0 transition-all duration-300 group-hover:scale-[1.03] group-hover:drop-shadow-[0_0_12px_rgba(212,175,55,0.4)] flex ${
+              scrolled 
+                ? "h-[48px] md:h-[56px] lg:h-[64px]" 
+                : "h-[58px] md:h-[76px] lg:h-[90px]"
+            }`}>
               <Image
                 src="/images/full-logo.png"
                 alt="SK Crown Convention Logo"
