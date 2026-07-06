@@ -101,7 +101,7 @@ export default function WeddingShowcase({ initialEvents }: WeddingShowcaseProps)
 
           {/* Large Showcase Image display */}
           <div className="lg:col-span-8 order-1 lg:order-2">
-            <div className="relative h-[360px] sm:h-[450px] md:h-[550px] w-full rounded-[24px] overflow-hidden group shadow-2xl border border-luxury-border">
+            <div className="w-full flex flex-col md:block md:relative md:h-[550px] md:rounded-[24px] md:overflow-hidden md:border md:border-luxury-border md:shadow-2xl">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIdx}
@@ -109,23 +109,26 @@ export default function WeddingShowcase({ initialEvents }: WeddingShowcaseProps)
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.5 }}
-                  className="absolute inset-0 w-full h-full"
+                  className="w-full flex flex-col md:block md:absolute md:inset-0 md:h-full"
                 >
-                  <Image
-                    src={activeEvent.src}
-                    alt={activeEvent.title}
-                    fill
-                    placeholder="blur"
-                    blurDataURL={shimmerBlurDataUrl(800, 550)}
-                    sizes="(max-width: 1024px) 100vw, 65vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
+                  {/* Image container */}
+                  <div className="relative w-full h-[280px] sm:h-[360px] md:h-full rounded-[24px] overflow-hidden border border-luxury-border shadow-2xl md:rounded-none md:border-none md:shadow-none">
+                    <Image
+                      src={activeEvent.src}
+                      alt={activeEvent.title}
+                      fill
+                      placeholder="blur"
+                      blurDataURL={shimmerBlurDataUrl(800, 550)}
+                      sizes="(max-width: 1024px) 100vw, 65vw"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                  </div>
                   {/* Glass overlay with details */}
-                  <div className="absolute inset-x-4 bottom-4 md:inset-x-6 md:bottom-6 p-4 md:p-8 bg-[#121212]/90 backdrop-blur-md border border-white/5 rounded-2xl">
-                    <h3 className="text-sm md:text-2xl font-serif font-bold text-white-soft">
+                  <div className="relative mt-4 mx-2 md:mx-0 md:mt-0 md:absolute md:inset-x-6 md:bottom-6 lg:inset-x-8 lg:bottom-8 p-5 md:p-6 lg:p-8 bg-[#121212]/90 backdrop-blur-md border border-white/5 rounded-2xl shadow-lg">
+                    <h3 className="text-lg md:text-xl lg:text-2xl font-serif font-bold text-gold">
                       {activeEvent.title}
                     </h3>
-                    <p className="text-[10px] md:text-sm text-muted-text font-sans font-light mt-1.5 md:mt-2 leading-relaxed line-clamp-3">
+                    <p className="text-xs md:text-sm text-muted-text font-sans font-light mt-2 leading-relaxed line-clamp-3 md:line-clamp-2 lg:line-clamp-3">
                       {activeEvent.description}
                     </p>
                   </div>
