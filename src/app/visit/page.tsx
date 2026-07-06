@@ -20,7 +20,7 @@ export default async function VisitPage() {
   const contactSettings = await getContactSettings();
 
   const highlights = [
-    { title: "Dedicated Valet Parking", desc: "Secured on-site spaces accommodating up to 50+ premium vehicles." },
+    { title: "Dedicated Valet Parking", desc: "Secured on-site spaces accommodating up to 50 premium vehicles." },
     { title: "Highway Accessibility", desc: "Located directly on the highway corridors for easy bus/cab transit." },
     { title: "Prime Landmarks", desc: "Conveniently situated near Mulug Road Hanuman Junction petrol station." },
   ];
