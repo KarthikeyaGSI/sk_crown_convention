@@ -5,19 +5,26 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import VenueStory from "@/components/VenueStory";
 import ExperienceEditorial from "@/components/ExperienceEditorial";
+import StorytellingCards from "@/components/StorytellingCards";
 import WeddingShowcase from "@/components/WeddingShowcase";
 import Gallery from "@/components/Gallery";
 import Reviews from "@/components/Reviews";
 import VisitInfo from "@/components/VisitInfo";
-import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
-import BookingModal from "@/components/BookingModal";
+import CTA from "@/components/CTA";
+import dynamic from "next/dynamic";
+
+const BookingModal = dynamic(() => import("@/components/BookingModal"), {
+  ssr: false,
+});
 import {
   SiteSettingsData,
   HomepageData,
   ContactSettingsData,
   Review,
-  HeroSlideData
+  HeroSlideData,
+  BookingSettingsData,
+  FormSettingsData
 } from "@/lib/fallback-data";
 import { ShowcaseEventData, GalleryImageData } from "@/lib/sanity-data";
 
@@ -29,6 +36,8 @@ interface HomeClientProps {
   galleryImages: GalleryImageData[];
   showcaseEvents: ShowcaseEventData[];
   contactSettings: ContactSettingsData;
+  bookingSettings: BookingSettingsData;
+  formSettings: FormSettingsData;
 }
 
 export default function HomeClient({
@@ -39,6 +48,8 @@ export default function HomeClient({
   galleryImages,
   showcaseEvents,
   contactSettings,
+  bookingSettings,
+  formSettings,
 }: HomeClientProps) {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
 
@@ -72,6 +83,11 @@ export default function HomeClient({
         {/* Experience Teaser */}
         <ExperienceEditorial homepage={homepage} />
 
+        {/* Cinematic Storytelling Cards */}
+        {homepage?.storytellingCards && homepage.storytellingCards.length > 0 && (
+          <StorytellingCards cards={homepage.storytellingCards} />
+        )}
+
         {/* Showcase */}
         <WeddingShowcase initialEvents={showcaseEvents} />
 
@@ -84,7 +100,6 @@ export default function HomeClient({
         {/* Reviews */}
         <Reviews
           initialReviews={reviews}
-          contactSettings={contactSettings}
         />
 
         {/* Visit Info */}
@@ -104,7 +119,13 @@ export default function HomeClient({
       />
 
       {/* Booking Dialog */}
-      <BookingModal isOpen={isBookingOpen} onClose={closeBooking} contactSettings={contactSettings} />
+      <BookingModal 
+        isOpen={isBookingOpen} 
+        onClose={closeBooking} 
+        contactSettings={contactSettings} 
+        bookingSettings={bookingSettings}
+        formSettings={formSettings}
+      />
     </div>
   );
 }

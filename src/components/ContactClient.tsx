@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Calendar, Users, FileText, CheckCircle2, ChevronRight, ChevronLeft, Phone, Mail, MapPin } from "lucide-react";
 import Button from "@/components/Button";
 import { ContactSettingsData } from "@/lib/fallback-data";
+import { getWhatsAppNumber } from "@/lib/whatsapp";
 
 const EVENT_TYPES = ["Wedding", "Reception", "Corporate", "Birthday", "Engagement", "Other"];
 
@@ -12,14 +13,11 @@ interface ContactClientProps {
 }
 
 export default function ContactClient({ contactSettings }: ContactClientProps) {
-  const rawPhone = contactSettings?.whatsApp 
-    ? contactSettings.whatsApp.replace(/[^0-9]/g, "")
-    : (contactSettings?.phone ? contactSettings.phone.replace(/[^0-9]/g, "") : "");
-  const cleanWhatsApp = rawPhone.length > 10 ? rawPhone : (rawPhone ? `91${rawPhone}` : "");
-  const whatsappNum = cleanWhatsApp || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917070709661";
+  const whatsappNum = getWhatsAppNumber(contactSettings?.whatsApp, contactSettings?.phone);
+  const cleanWhatsApp = whatsappNum;
 
   const contact = contactSettings || {
-    phone: "+91 7070709661, +91 7900775577",
+    phone: "+91 7070709661",
     email: "skcrown700@gmail.com",
     address: "Sk crown Mulug Road, Near Hp Petrol Station, Hanuman Junction, Warangal, India 506006",
   };
@@ -263,7 +261,7 @@ Thank you.`;
             <div className="space-y-6 text-center py-8 my-auto">
               <h3 className="text-lg font-serif font-bold text-red-400">Submission Failed</h3>
               <p className="text-xs md:text-sm text-muted-text font-sans max-w-sm mx-auto leading-relaxed">
-                We couldn't submit your enquiry. <br />
+                We couldn&apos;t submit your enquiry. <br />
                 Please try again or contact us directly on WhatsApp.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">

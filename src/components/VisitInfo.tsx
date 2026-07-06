@@ -13,7 +13,7 @@ interface VisitInfoProps {
 export default function VisitInfo({ contactSettings }: VisitInfoProps) {
   const contact = contactSettings || {
     address: "Sk crown Mulug Road, Near Hp Petrol Station, Hanuman Junction, Warangal, India 506006",
-    phone: "+91 7070709661, +91 7900775577",
+    phone: "+91 7070709661",
     email: "skcrown700@gmail.com",
     openingHours: "Open 24/7 for Bookings & Events",
     googleMapsLink: "https://maps.app.goo.gl/EVGcvP6fjXupsRUd6",

@@ -1,0 +1,6 @@
+# Ignore generated files and build artifacts
+.studio-skcrownconventios/dist/**
+.next/**
+out/**
+build/**
+node_modules/**

@@ -13,10 +13,21 @@ export const metadata: Metadata = {
   keywords: ["Convention Gallery", "Wedding Photos Warangal", "SK Crown Decors"],
 };
 
+import { getLocalGalleryImages } from "@/lib/local-images";
+
 export default async function GalleryPage() {
   const siteSettings = await getSiteSettings();
   const contactSettings = await getContactSettings();
-  const galleryImages = await getGalleryImages();
+  const sanityGalleryImages = await getGalleryImages();
+  
+  // Merge Sanity images with local auto-discovered images
+  const localImages = getLocalGalleryImages();
+  
+  // Deduplicate by URL or title (simplistic approach: append local images not present in Sanity)
+  const existingUrls = new Set(sanityGalleryImages.map(img => img.imageUrl));
+  const uniqueLocalImages = localImages.filter(img => !existingUrls.has(img.imageUrl));
+  
+  const galleryImages = [...sanityGalleryImages, ...uniqueLocalImages];
 
   return (
     <div className="min-h-screen bg-luxury-bg text-white-soft flex flex-col font-sans">

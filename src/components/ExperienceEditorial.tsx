@@ -18,10 +18,11 @@ export default function ExperienceEditorial({ homepage }: ExperienceEditorialPro
       label: "Featured Experience",
       title: feat?.title || "A Grand Welcoming Arrival",
       desc: feat?.description || "A breathtaking high-ceiling entrance welcoming your guests in absolute grandeur. Crafted to leave a lasting first impression of luxury, setting a majestic tone for your celebration.",
-      image: feat?.imageUrl || experienceImages.entrance,
-      imageAlt: "Featured Experience SK Crown Convention",
+      image: feat?.imageUrl || "/images/sk crown main.webp",
+      imageAlt: "SK Crown Convention Hall Luxury Wedding Venue",
       align: "left",
       bullets: feat?.bulletPoints || [],
+      priority: true,
     },
     {
       label: "The Dining",
@@ -31,22 +32,24 @@ export default function ExperienceEditorial({ homepage }: ExperienceEditorialPro
       imageAlt: "Luxury dining layout at SK Crown Convention",
       align: "right",
       bullets: [],
+      priority: false,
     },
     {
       label: "The Banquet",
       title: "Spacious & Flexible Seating",
-      desc: "Generous hall configurations offering luxury comfort for up to 3,000 guests. Carefully engineered acoustics and clear sightlines ensure every attendee remains fully connected to the ceremony.",
+      desc: "Generous hall configurations offering luxury comfort for up to 2000 guests. Carefully engineered acoustics and clear sightlines ensure every attendee remains fully connected to the ceremony.",
       image: venueImages[1],
       imageAlt: "Spacious seating interior at SK Crown Convention",
       align: "left",
       bullets: [],
+      priority: false,
     },
   ];
 
   return (
     <section id="experience" className="bg-[#121212] border-b border-luxury-border py-32 md:py-48 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-36 md:space-y-48">
-        
+
         {/* Section Header */}
         <div className="max-w-3xl space-y-4">
           <span className="text-xs uppercase tracking-[0.3em] text-gold font-sans font-semibold">
@@ -60,7 +63,7 @@ export default function ExperienceEditorial({ homepage }: ExperienceEditorialPro
 
         {/* Alternating Sections */}
         <div className="space-y-32 md:space-y-44">
-          {sections.map((section, index) => {
+          {sections.map((section) => {
             const isLeft = section.align === "left";
             return (
               <div
@@ -73,18 +76,18 @@ export default function ExperienceEditorial({ homepage }: ExperienceEditorialPro
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.8 }}
-                  className={`lg:col-span-8 relative h-[300px] md:h-[500px] rounded-[24px] overflow-hidden group border border-luxury-border shadow-2xl ${
-                    isLeft ? "lg:order-1" : "lg:order-2 lg:col-start-5"
-                  }`}
+                  className={`lg:col-span-8 relative h-[300px] md:h-[500px] rounded-[24px] overflow-hidden group border border-luxury-border shadow-2xl ${isLeft ? "lg:order-1" : "lg:order-2 lg:col-start-5"
+                    }`}
                 >
                   <Image
                     src={section.image}
                     alt={section.imageAlt}
                     fill
+                    priority={section.priority}
                     placeholder="blur"
                     blurDataURL={shimmerBlurDataUrl(800, 500)}
-                    sizes="(max-width: 1024px) 100vw, 70vw"
-                    className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                    sizes="(max-width:768px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
                 </motion.div>
@@ -95,9 +98,8 @@ export default function ExperienceEditorial({ homepage }: ExperienceEditorialPro
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.8, delay: 0.1 }}
-                  className={`lg:col-span-4 space-y-4 ${
-                    isLeft ? "lg:order-2" : "lg:order-1 lg:col-start-1"
-                  }`}
+                  className={`lg:col-span-4 space-y-4 ${isLeft ? "lg:order-2" : "lg:order-1 lg:col-start-1"
+                    }`}
                 >
                   <span className="text-xs uppercase tracking-[0.25em] text-gold font-sans font-semibold">
                     {section.label}
@@ -109,7 +111,7 @@ export default function ExperienceEditorial({ homepage }: ExperienceEditorialPro
                   <p className="text-base md:text-lg text-muted-text font-sans font-light leading-relaxed mb-4">
                     {section.desc}
                   </p>
-                  
+
                   {section.bullets.length > 0 && (
                     <ul className="space-y-2.5 pt-2">
                       {section.bullets.map((bullet, idx) => (

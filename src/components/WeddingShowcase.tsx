@@ -12,19 +12,21 @@ interface WeddingShowcaseProps {
 
 export default function WeddingShowcase({ initialEvents }: WeddingShowcaseProps) {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [events, setEvents] = useState<Array<{ src: string; title: string; description: string }>>([]);
+  const [events, setEvents] = useState<Array<{ src: string; title: string; description: string }>>(() => {
+    if (initialEvents && initialEvents.length > 0) {
+      return initialEvents.map((e) => ({
+        src: e.imageUrl,
+        title: e.title,
+        description: `${e.description}${e.theme ? ` | Theme: ${e.theme}` : ""}${
+          e.capacity ? ` | Guest Capacity: ${e.capacity}` : ""
+        }`,
+      }));
+    }
+    return [];
+  });
 
   useEffect(() => {
     if (initialEvents && initialEvents.length > 0) {
-      setEvents(
-        initialEvents.map((e) => ({
-          src: e.imageUrl,
-          title: e.title,
-          description: `${e.description}${e.theme ? ` | Theme: ${e.theme}` : ""}${
-            e.capacity ? ` | Guest Capacity: ${e.capacity}` : ""
-          }`,
-        }))
-      );
       return;
     }
 

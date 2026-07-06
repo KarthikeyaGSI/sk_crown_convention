@@ -4,10 +4,10 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Phone, ArrowRight } from "lucide-react";
 import { SiteSettingsData, ContactSettingsData } from "@/lib/fallback-data";
-import Button from "./Button";
 import { motion, AnimatePresence } from "framer-motion";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 interface NavbarProps {
   siteSettings: SiteSettingsData;
@@ -28,40 +28,70 @@ export default function Navbar({ siteSettings, contactSettings, onOpenBooking }:
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const logoUrl = siteSettings.logoUrl || "/images/logo.png";
   const navLinks = siteSettings.navLinks || [];
+  
+  const phoneTel = contactSettings.phone.replace(/[^0-9+]/g, '');
+
+  const renderPrimaryCTA = (isMobile = false) => {
+    const content = (
+      <button 
+        onClick={onOpenBooking ? () => {
+          if (isMobile) setMobileMenuOpen(false);
+          onOpenBooking();
+        } : undefined}
+        className={`relative group rounded-full bg-gradient-to-r from-[#D4AF37] via-[#FFF1AB] to-[#AA7C11] text-black font-semibold text-[13px] uppercase tracking-[0.1em] shadow-[0_4px_20px_rgba(212,175,55,0.25)] hover:shadow-[0_8px_30px_rgba(212,175,55,0.4)] transition-all duration-300 hover:-translate-y-[2px] flex items-center justify-center gap-3 shrink-0 flex-none ${isMobile ? "w-full h-[54px]" : "w-[210px] h-[54px]"}`}
+      >
+        <div className="absolute inset-0 rounded-full overflow-hidden">
+          <div className="absolute inset-0 bg-white/40 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[800ms] ease-in-out" />
+        </div>
+        <span className="relative z-10 whitespace-nowrap">Book Venue Visit</span>
+        <ArrowRight className="w-4 h-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
+      </button>
+    );
+
+    if (onOpenBooking) return content;
+
+    return (
+      <Link href="/contact" passHref className={isMobile ? "w-full shrink-0 flex-none" : "shrink-0 flex-none"} onClick={isMobile ? () => setMobileMenuOpen(false) : undefined}>
+        {content}
+      </Link>
+    );
+  };
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-40 transition-all duration-500 border-b ${
-          scrolled
-            ? "bg-[#0B0B0B]/85 backdrop-blur-xl border-gold/15 py-3"
-            : "bg-transparent border-transparent py-4.5"
+        className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
+          scrolled 
+            ? "bg-[#0B0B0B]/85 backdrop-blur-2xl border-b border-gold/15 shadow-[0_4px_30px_rgba(0,0,0,0.5)] h-[76px]" 
+            : "bg-transparent border-b border-transparent h-[90px]"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          {/* Logo with Crest Icon */}
+        {/* Main Container - Strict Grid Layout for Desktop */}
+        <div className="max-w-[1600px] h-full mx-auto px-8 w-full flex items-center justify-between lg:grid lg:grid-cols-[340px_minmax(0,1fr)_420px] gap-[32px]">
+          
+          {/* 1. Logo Column */}
           <Link
             href="/"
-            className="flex items-center gap-3 group focus:outline-none"
+            aria-label="SK Crown Convention Home"
+            className="flex items-center shrink-0 focus:outline-none group"
           >
-            <div className="relative w-8 h-8 md:w-10 h-10 overflow-hidden transition-transform duration-300 group-hover:scale-105">
+            <div className={`relative shrink-0 transition-transform duration-200 group-hover:scale-[1.03] group-hover:drop-shadow-[0_0_12px_rgba(212,175,55,0.4)] flex h-[48px] md:h-[60px] lg:h-[72px]`}>
               <Image
-                src={logoUrl}
-                alt="SK Crown Logo Crest"
-                fill
+                src="/images/full-logo.png"
+                alt="SK Crown Convention Logo"
+                width={800}
+                height={250}
                 priority
-                className="object-contain"
+                quality={100}
+                className="object-contain h-full w-auto"
+                sizes="(max-width: 768px) 250px, (max-width: 1024px) 300px, 400px"
               />
             </div>
-            <span className="font-serif text-base md:text-lg font-bold tracking-[0.2em] text-gold group-hover:text-gold-soft transition-colors select-none">
-              SK CROWN
-            </span>
           </Link>
 
-          {/* Desktop Navigation Menu */}
-          <nav className="hidden lg:flex items-center gap-8">
+          {/* 2. Navigation Column */}
+          <nav className="hidden lg:flex items-center justify-center min-w-0 overflow-visible gap-[24px] xl:gap-[32px] 2xl:gap-[40px] h-full">
             {navLinks.map((link) => {
               const isActive = pathname === link.url;
               return (
@@ -70,44 +100,47 @@ export default function Navbar({ siteSettings, contactSettings, onOpenBooking }:
                   href={link.url}
                   target={link.openInNewTab ? "_blank" : undefined}
                   rel={link.openInNewTab ? "noopener noreferrer" : undefined}
-                  className="relative text-[11px] uppercase tracking-[0.25em] text-white-soft/80 hover:text-gold font-sans font-medium transition-colors py-2"
+                  className={`relative text-[12px] uppercase tracking-[0.2em] font-sans font-medium transition-colors py-2 flex items-center h-full group whitespace-nowrap ${isActive ? 'text-gold' : 'text-white-soft/80 hover:text-gold'}`}
                 >
                   {link.label}
                   {isActive && (
                     <motion.div
                       layoutId="activeNavUnderline"
-                      className="absolute bottom-0 left-0 w-full h-[1px] bg-gold"
+                      className="absolute bottom-[20px] left-0 w-full h-[2px] bg-gold"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
+                  )}
+                  {!isActive && (
+                    <div className="absolute bottom-[20px] left-0 w-0 h-[2px] bg-gold/50 transition-all duration-300 group-hover:w-full" />
                   )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right Action Button */}
-          <div className="hidden lg:block">
-            {onOpenBooking ? (
-              <Button variant="primary" showArrow={false} onClick={onOpenBooking} className="px-6 py-2.5">
-                Book Venue Visit
-              </Button>
-            ) : (
-              <Link href="/contact" passHref>
-                <Button variant="primary" showArrow={false} className="px-6 py-2.5">
-                  Book Venue Visit
-                </Button>
-              </Link>
-            )}
+          {/* 3. CTA & Phone Column */}
+          <div className="hidden lg:flex items-center justify-end gap-[18px] whitespace-nowrap shrink-0">
+
+            {renderPrimaryCTA(false)}
+
+            <a 
+              href={`tel:${phoneTel}`} 
+              className="hidden xl:flex items-center justify-center gap-2 text-white hover:text-gold transition-colors font-sans group whitespace-nowrap shrink-0 flex-none"
+            >
+              <Phone className="w-5 h-5 text-gold group-hover:text-gold transition-colors" />
+              <span className="font-semibold tracking-wide text-[16px]">{contactSettings.phone}</span>
+            </a>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile/Tablet Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden text-white-soft hover:text-gold transition-colors p-1 cursor-pointer"
+            className="lg:hidden flex items-center justify-center text-white-soft hover:text-gold transition-colors p-2 cursor-pointer focus:outline-none min-h-[44px] min-w-[44px] shrink-0"
             aria-label="Toggle mobile menu"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
+          
         </div>
       </header>
 
@@ -116,46 +149,61 @@ export default function Navbar({ siteSettings, contactSettings, onOpenBooking }:
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
+            animate={{ opacity: 1, height: "100vh" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed top-14 md:top-18 left-0 w-full z-45 lg:hidden bg-[#0B0B0B] border-b border-luxury-border shadow-2xl overflow-hidden"
+            className="fixed top-0 left-0 w-full z-30 lg:hidden bg-[#0B0B0B] overflow-y-auto flex flex-col pt-[84px]"
           >
-            <div className="px-6 py-8 flex flex-col gap-5 max-h-[85vh] overflow-y-auto">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.url}
-                  target={link.openInNewTab ? "_blank" : undefined}
-                  rel={link.openInNewTab ? "noopener noreferrer" : undefined}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-xs uppercase tracking-[0.2em] font-sans text-white-soft/80 hover:text-gold transition-colors block border-b border-luxury-border/30 pb-2"
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="pt-4 flex flex-col gap-4">
-                {onOpenBooking ? (
-                  <Button
-                    variant="primary"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      onOpenBooking();
-                    }}
-                    className="w-full"
+            <div className="flex flex-col flex-1 px-6 py-8">
+              <nav className="flex flex-col gap-6">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.url}
+                    target={link.openInNewTab ? "_blank" : undefined}
+                    rel={link.openInNewTab ? "noopener noreferrer" : undefined}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-sm uppercase tracking-[0.2em] font-sans text-white-soft hover:text-gold transition-colors block border-b border-white/5 pb-4"
                   >
-                    Book Venue Visit
-                  </Button>
-                ) : (
-                  <Link href="/contact" passHref className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="primary" className="w-full">
-                      Book Venue Visit
-                    </Button>
+                    {link.label}
                   </Link>
-                )}
-                <div className="text-center text-[10px] text-muted-text font-sans tracking-wide">
-                  {contactSettings.phone} • {contactSettings.address.split(",").slice(-2).join(",").trim()}
+                ))}
+                
+                <Link
+                  href="#gallery"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm uppercase tracking-[0.2em] font-sans text-white-soft hover:text-gold transition-colors block border-b border-white/5 pb-4"
+                >
+                  View Gallery
+                </Link>
+                <a
+                  href={getWhatsAppLink(contactSettings.whatsApp, contactSettings.phone)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm uppercase tracking-[0.2em] font-sans text-white-soft hover:text-gold transition-colors block border-b border-white/5 pb-4"
+                >
+                  WhatsApp
+                </a>
+                <a
+                  href={`tel:${phoneTel}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm uppercase tracking-[0.2em] font-sans text-white-soft hover:text-gold transition-colors block border-b border-white/5 pb-4"
+                >
+                  Call Now
+                </a>
+              </nav>
+              
+              <div className="mt-auto pt-12 pb-8 flex flex-col gap-8">
+                {/* Contact Info in Mobile Menu */}
+                <div className="flex flex-col items-center text-center gap-4 text-sm font-sans text-white-soft/70">
+                  <a href={`tel:${phoneTel}`} className="flex items-center gap-2 hover:text-gold transition-colors font-semibold text-lg text-white group">
+                    <Phone className="w-5 h-5 text-gold group-hover:text-gold" />
+                    {contactSettings.phone}
+                  </a>
                 </div>
+
+                {renderPrimaryCTA(true)}
               </div>
             </div>
           </motion.div>

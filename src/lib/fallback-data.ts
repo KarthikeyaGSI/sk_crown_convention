@@ -36,24 +36,50 @@ export interface SiteSettingsData {
   footerQuickLinks: Array<{ label: string; url: string }>;
   copyrightText: string;
   developerCredit?: { text: string; url: string };
+  googleAnalyticsId?: string;
+  googleTagManagerId?: string;
+  metaPixelId?: string;
 }
 
 export interface HomepageData {
   heroHeading: string;
   heroSubheading: string;
+  heroVideoWebmUrl?: string;
+  heroVideoMp4Url?: string;
+  heroPoster?: string;
+  heroOverlayOpacity?: number;
+  heroEnabled?: boolean;
+  heroOrder?: number;
   heroCTA: { label: string; link: string };
   heroSecondaryCTA: { label: string; link: string };
-  introSection: { title: string; text: string; imageUrl: string };
+  introSection: { enabled?: boolean; order?: number; title: string; text: string; imageUrl: string };
   highlights: Array<{ title: string; description: string; icon?: string }>;
   featuredExperience: {
+    enabled?: boolean;
+    order?: number;
     title: string;
     subtitle?: string;
     description: string;
     imageUrl: string;
     bulletPoints?: string[];
   };
-  galleryPreview: { title: string; subtitle?: string };
-  ctaBanner: { title: string; subtitle?: string; ctaLabel: string; ctaLink: string };
+  galleryPreview: { enabled?: boolean; order?: number; title: string; subtitle?: string };
+  ctaBanner: { enabled?: boolean; order?: number; title: string; subtitle?: string; ctaLabel: string; ctaLink: string };
+  storytellingCards?: Array<{
+    enabled: boolean;
+    order: number;
+    category: string;
+    title: string;
+    subtitle?: string;
+    description: string;
+    image: string;
+    imageAlt: string;
+    icon?: string;
+    primaryCTA?: { label: string; link: string };
+    secondaryCTA?: { label: string; link: string };
+    accentColor?: string;
+    isCtaCard?: boolean;
+  }>;
 }
 
 export interface ContactSettingsData {
@@ -87,6 +113,30 @@ export interface SeoSettingsData {
   faqs?: Array<{question: string; answer: string}>;
 }
 
+
+export interface BookingSettingsData {
+  enabled: boolean;
+  message?: string;
+  availableSlots?: string[];
+  guestCountOptions?: string[];
+}
+
+export interface FormSettingsData {
+  successMessage: string;
+  errorMessage: string;
+  buttonLabel: string;
+  whatsAppTemplate: string;
+  emailSubject: string;
+}
+
+export interface VenueHighlightsData {
+  metrics: Array<{ value: string; label: string }>;
+}
+
+export interface AnnouncementBannerData {
+  enabled: boolean;
+  message?: string;
+}
 
 export const fallbackHero = [
   "/images/sk crown decor main.webp",
@@ -172,18 +222,28 @@ export const fallbackExperience = {
 };
 
 export const fallbackGallery = [
-  "/images/sk crown decor main.webp",
-  "/images/sk crown entrance.webp",
-  "/images/sk crown stage.webp",
-  "/images/sk crown decor.webp",
-  "/images/sk crown decor 3.webp",
-  "/images/sk crown decor 4.webp",
-  "/images/sk crown decor  _.webp",
-  "/images/sk crown decor __.webp",
-  "/images/sk crown decor  34.webp",
-  "/images/sk crown internal.webp",
-  "/images/sk crown interior seating.webp",
-  "/images/sk crown dining.webp",
+  // Wedding
+  { url: "/images/sk crown decor.webp", category: "Wedding Decor" },
+  { url: "/images/sk crown decor 3.webp", category: "Wedding Decor" },
+  { url: "/images/sk crown decor 4.webp", category: "Wedding Decor" },
+  { url: "/images/sk crown decor  34.webp", category: "Wedding Decor" },
+  { url: "/images/sk crown decor main.webp", category: "Wedding Decor" },
+  // Stage
+  { url: "/images/sk crown stage.webp", category: "Stage" },
+  // Dining
+  { url: "/images/sk crown dining.webp", category: "Dining" },
+  // Catering
+  { url: "/images/sk crown catering team.webp", category: "Catering" },
+  // Seating
+  { url: "/images/sk crown seating.webp", category: "Seating" },
+  { url: "/images/sk crown internal.webp", category: "Seating" },
+  { url: "/images/sk crown interior seating.webp", category: "Seating" },
+  // Parking
+  { url: "/images/sk crown parking.webp", category: "Parking" },
+  { url: "/images/sk crown parking 2.webp", category: "Parking" },
+  // Venue
+  { url: "/images/sk crown entrance.webp", category: "Venue" },
+  { url: "/images/sk crown main.webp", category: "Venue" },
 ];
 
 export const fallbackFooterBackground = "/images/sk crown entrance.webp";
@@ -227,7 +287,7 @@ export const fallbackReviews: Review[] = [
 ];
 
 export const fallbackSiteSettings: SiteSettingsData = {
-  logoUrl: "/images/logo.png",
+  logoUrl: "/images/logo.webp",
   copyrightText: "© 2026 SK Crown Convention. All Rights Reserved.",
   navLinks: [
     { label: "Home", url: "/" },
@@ -245,8 +305,8 @@ export const fallbackSiteSettings: SiteSettingsData = {
     { label: "Reviews", url: "/reviews" },
   ],
   developerCredit: {
-    text: "Powered by MarketingKo Labs",
-    url: "#",
+    text: "Digital Experience by MarketingKo",
+    url: "https://linktr.ee/karthikeyathallapally",
   },
 };
 
@@ -261,16 +321,16 @@ export const fallbackHomepage: HomepageData = {
     imageUrl: "/images/sk crown decor main.webp",
   },
   highlights: [
-    { title: "Capacity", description: "Accommodates up to 3,000 guests comfortably", icon: "Users" },
+    { title: "Capacity", description: "Up to 2000 Guests", icon: "Users" },
     { title: "24/7 Access", description: "Round-the-clock availability for seamless events", icon: "Flame" },
-    { title: "Massive Parking", description: "Dedicated secure space for 500+ vehicles", icon: "Car" },
+    { title: "Parking", description: "Up to 50 Vehicles", icon: "Car" },
     { title: "Air Conditioned", description: "Fully climate-controlled indoor halls", icon: "Shield" },
   ],
   featuredExperience: {
     title: "A Premium Luxury Setting",
     subtitle: "Designed for Unforgettable Moments",
     description: "Every corner of SK Crown Convention is designed to express luxury and comfort. From our state-of-the-art stage setups and royal aisle decorations to our massive centralized AC banqueting layouts, we ensure your wedding is a masterclass in hospitality.",
-    imageUrl: "/images/sk crown stage.webp",
+    imageUrl: "/images/sk crown main.webp",
     bulletPoints: [
       "Spacious Dining Hall for over 1,000 guests simultaneously",
       "Expansive professional catering kitchens",
@@ -288,11 +348,66 @@ export const fallbackHomepage: HomepageData = {
     ctaLabel: "Get In Touch",
     ctaLink: "/contact",
   },
+  storytellingCards: [
+    {
+      enabled: true,
+      order: 1,
+      category: "Signature Venue",
+      title: "Royal Wedding Stage",
+      description: "Create unforgettable weddings with elegant floral décor, grand stage setups, and luxurious seating arrangements designed for timeless celebrations.",
+      image: "/images/sk crown stage.webp",
+      imageAlt: "Royal Wedding Stage at SK Crown Convention",
+      icon: "Heart",
+    },
+    {
+      enabled: true,
+      order: 2,
+      category: "Grand Banqueting",
+      title: "Luxury Banquet Hall",
+      description: "Celebrate comfortably in a fully air-conditioned banquet hall designed to host intimate gatherings and grand events with ease.",
+      image: "/images/sk crown interior seating.webp",
+      imageAlt: "Luxury Banquet Hall at SK Crown Convention",
+      icon: "Users",
+    },
+    {
+      enabled: true,
+      order: 3,
+      category: "Service & Excellence",
+      title: "Premium Hospitality",
+      description: "From planning to execution, our experienced team ensures every guest enjoys a seamless and memorable event experience.",
+      image: "/images/sk crown dining.webp",
+      imageAlt: "Premium Hospitality at SK Crown Convention",
+      icon: "Star",
+    },
+    {
+      enabled: true,
+      order: 4,
+      category: "Accessibility",
+      title: "Spacious Parking & Convenience",
+      description: "Dedicated parking, easy accessibility, and thoughtfully planned venue layouts make every celebration stress-free for your guests.",
+      image: "/images/sk crown parking.webp",
+      imageAlt: "Spacious Parking at SK Crown Convention",
+      icon: "Car",
+    },
+    {
+      enabled: true,
+      order: 5,
+      category: "Begin Your Journey",
+      title: "Your Celebration Starts Here",
+      description: "Schedule a venue visit and discover why hundreds of families choose SK Crown Convention for life's biggest moments.",
+      image: "/images/sk crown entrance.webp",
+      imageAlt: "SK Crown Convention Entrance",
+      icon: "Sparkles",
+      isCtaCard: true,
+      primaryCTA: { label: "Book Venue Visit", link: "/contact" },
+      secondaryCTA: { label: "View Gallery", link: "/gallery" },
+    },
+  ],
 };
 
 export const fallbackContactSettings: ContactSettingsData = {
-  phone: "+91 7070709661, +91 7900775577",
-  whatsApp: "https://wa.me/917070709661",
+  phone: "+91 7070709661",
+  whatsApp: "https://wa.me/917070709661?text=Hello%20SK%20Crown%20Convention%2C%20I%20would%20like%20to%20enquire%20about%20booking%20your%20venue.",
   email: "skcrown700@gmail.com",
   address: "Sk crown Mulug Road, Near Hp Petrol Station, Hanuman Junction, Warangal, India 506006",
   googleMapsLink: "https://maps.app.goo.gl/EVGcvP6fjXupsRUd6",
@@ -308,9 +423,46 @@ export const fallbackSeoSettings: SeoSettingsData = {
   canonicalBaseUrl: "https://skcrownconvention.com",
   // GEO & contact placeholders
   address: "Sk crown Mulug Road, Near Hp Petrol Station, Hanuman Junction, Warangal, India 506006",
-  phone: "+91 7070709661, +91 7900775577",
+  phone: "+91 7070709661",
   latitude: 18.0264,
   longitude: 79.6201,
   openingHours: "Open 24/7 for Bookings & Events",
   faqs: [],
 };
+
+export const fallbackBookingSettings: BookingSettingsData = {
+  enabled: true,
+  availableSlots: ["Morning", "Evening", "Full Day"],
+  guestCountOptions: [
+    "Below 100",
+    "100–250",
+    "250–500",
+    "500–750",
+    "750–1000",
+    "1000–1500",
+    "1500–2000",
+    "More than 2000",
+  ],
+};
+
+export const fallbackFormSettings: FormSettingsData = {
+  successMessage: "✓ Booking Request Sent Successfully",
+  errorMessage: "Failed to send your request. Please try again.",
+  buttonLabel: "Confirm & Book",
+  whatsAppTemplate: "Hello SK Crown Convention,\n\nI would like to enquire about booking your venue.\n\n━━━━━━━━━━━━━━━━━━━━\n\n🎉 Event Type:\n{{eventType}}\n\n📅 Preferred Date:\n{{date}}\n\n⏰ Preferred Slot:\n{{slot}}\n\n👥 Guests:\n{{guests}}\n\n👤 Name:\n{{name}}\n\n📞 Phone:\n{{phone}}\n\n📧 Email:\n{{email}}\n\n📝 Additional Requirements:\n{{requirements}}\n\n━━━━━━━━━━━━━━━━━━━━\n\nPlease let me know the availability.\n\nThank you.",
+  emailSubject: "New Venue Enquiry",
+};
+
+export const fallbackVenueHighlights: VenueHighlightsData = {
+  metrics: [
+    { value: "2000", label: "Guest Capacity" },
+    { value: "50", label: "Parking Spaces" },
+    { value: "100+", label: "Successful Weddings" },
+    { value: "24×7", label: "Support" },
+  ],
+};
+
+export const fallbackAnnouncementBanner: AnnouncementBannerData = {
+  enabled: false,
+};
+

@@ -7,6 +7,7 @@ import { footerBackground } from "@/lib/images";
 import { SiteSettingsData, ContactSettingsData } from "@/lib/fallback-data";
 import { Mail, Phone, MapPin, ArrowUp, Send } from "lucide-react";
 import { motion } from "framer-motion";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 interface FooterProps {
   siteSettings: SiteSettingsData;
@@ -21,10 +22,9 @@ export default function Footer({ siteSettings, contactSettings }: FooterProps) {
   };
 
   const navLinks = siteSettings.navLinks || [];
-  const logoUrl = siteSettings.logoUrl || "/images/logo.png";
   const copyrightText = siteSettings.copyrightText || "© 2026 SK Crown Convention. All Rights Reserved.";
-  const devCreditText = siteSettings.developerCredit?.text || "Powered by MarketingKo Labs";
-  const devCreditUrl = siteSettings.developerCredit?.url || "#";
+  const devCreditText = siteSettings.developerCredit?.text || "Digital Experience by MarketingKo";
+  const devCreditUrl = siteSettings.developerCredit?.url || "https://linktr.ee/karthikeyathallapally";
 
   // Clean raw phone for WhatsApp / Tel link
   const rawPhone = contactSettings.phone.replace(/[^0-9]/g, "");
@@ -51,19 +51,23 @@ export default function Footer({ siteSettings, contactSettings }: FooterProps) {
           
           {/* Brand/Logo Column */}
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="relative w-8 h-8 overflow-hidden">
+            <Link
+              href="/"
+              aria-label="SK Crown Convention Home"
+              className="flex items-center shrink-0 focus:outline-none group"
+            >
+              <div className="relative shrink-0 flex h-[48px] overflow-hidden max-w-[220px]">
                 <Image
-                  src={logoUrl}
-                  alt="SK Crown Crest logo"
-                  fill
-                  className="object-contain"
+                  src="/images/full-logo.png"
+                  alt="SK Crown Convention Logo"
+                  width={800}
+                  height={250}
+                  className="object-contain h-full w-auto"
                 />
               </div>
-              <h3 className="font-serif text-2xl font-bold tracking-widest text-gold">SK CROWN</h3>
-            </div>
+            </Link>
             <p className="text-xs text-muted-text font-sans font-light leading-relaxed max-w-xs">
-              Where celebrations meet luxury hospitality. Warangal's premier convention venue for weddings, receptions, and corporate galas.
+              Where celebrations meet luxury hospitality. Warangal&apos;s premier convention venue for weddings, receptions, and corporate galas.
             </p>
             
             {/* Social Icons (Instagram, WhatsApp, Phone only) */}
@@ -86,29 +90,66 @@ export default function Footer({ siteSettings, contactSettings }: FooterProps) {
                 </motion.a>
               )}
 
-              {contactSettings.whatsApp ? (
+              <motion.a
+                href={getWhatsAppLink(contactSettings.whatsApp, contactSettings.phone)}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
+                aria-label="WhatsApp"
+              >
+                <Send className="w-4 h-4" />
+              </motion.a>
+
+              {contactSettings.facebook && (
                 <motion.a
-                  href={contactSettings.whatsApp}
+                  href={contactSettings.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
                   transition={{ type: "spring", stiffness: 300, damping: 15 }}
                   className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
-                  aria-label="WhatsApp"
+                  aria-label="Facebook"
                 >
-                  <Send className="w-4 h-4" />
+                  <svg className="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                  </svg>
                 </motion.a>
-              ) : (
+              )}
+
+              {contactSettings.youtube && (
                 <motion.a
-                  href={`https://wa.me/${primaryPhone}`}
+                  href={contactSettings.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
                   transition={{ type: "spring", stiffness: 300, damping: 15 }}
                   className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
-                  aria-label="WhatsApp"
+                  aria-label="YouTube"
                 >
-                  <Send className="w-4 h-4" />
+                  <svg className="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z" />
+                    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
+                  </svg>
+                </motion.a>
+              )}
+
+              {contactSettings.linkedin && (
+                <motion.a
+                  href={contactSettings.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(199,163,106,0.3)" }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  className="p-2.5 rounded-full bg-luxury-card border border-luxury-border text-muted-text hover:text-gold hover:border-gold/30 transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <svg className="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                    <rect x="2" y="9" width="4" height="12" />
+                    <circle cx="4" cy="4" r="2" />
+                  </svg>
                 </motion.a>
               )}
 
@@ -179,30 +220,41 @@ export default function Footer({ siteSettings, contactSettings }: FooterProps) {
         </div>
 
         {/* Footer Bottom Copyright */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-          <p className="text-[10px] text-muted-text font-sans font-light tracking-wider">
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+          <p className="text-[10px] text-muted-text font-sans font-light tracking-wider order-1">
             {copyrightText.replace("{currentYear}", String(currentYear))}
           </p>
           
           {/* Back to Top & Digital Credits */}
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col md:flex-row items-center gap-[32px] order-2">
+            
+            <a
+              href={devCreditUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-[10px] text-[#D4AF37] font-semibold text-[16px] md:text-[18px] tracking-[0.02em] font-sans order-1"
+              aria-label={devCreditText}
+            >
+              <span className="transition-colors duration-200 group-hover:text-[#FFF1AB]">
+                {devCreditText}
+              </span>
+              <div className="relative h-[20px] md:h-[24px] lg:h-[32px] aspect-square flex-shrink-0 transition-all duration-200 group-hover:scale-[1.05] group-hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-[4px] overflow-hidden">
+                <Image 
+                  src="/images/marketingko-logo.jpg" 
+                  alt="MarketingKo Logo" 
+                  fill 
+                  className="object-contain" 
+                />
+              </div>
+            </a>
+
             <button
               onClick={scrollToTop}
-              className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-text hover:text-gold transition-colors font-sans cursor-pointer focus:outline-none"
+              className="group inline-flex items-center gap-1.5 text-[12px] uppercase tracking-wider text-muted-text hover:text-gold transition-colors duration-200 font-sans cursor-pointer focus:outline-none order-2"
             >
-              Back to Top <ArrowUp className="w-3.5 h-3.5" />
+              Back to Top 
+              <ArrowUp className="w-4 h-4 transition-transform duration-200 group-hover:-translate-y-[2px]" />
             </button>
-            <p className="text-[10px] text-muted-text/75 font-sans font-light tracking-wider">
-              Digital Experience by{" "}
-              <a
-                href={devCreditUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gold hover:underline transition-colors font-medium"
-              >
-                {devCreditText}
-              </a>
-            </p>
           </div>
         </div>
 
