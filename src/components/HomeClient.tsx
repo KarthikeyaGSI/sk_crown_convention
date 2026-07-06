@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import VenueStory from "@/components/VenueStory";
@@ -119,13 +119,15 @@ export default function HomeClient({
       />
 
       {/* Booking Dialog */}
-      <BookingModal
-        isOpen={isBookingOpen}
-        onClose={closeBooking}
-        contactSettings={contactSettings}
-        bookingSettings={bookingSettings}
-        formSettings={formSettings}
-      />
+      <Suspense fallback={null}>
+        <BookingModal
+          isOpen={isBookingOpen}
+          onClose={closeBooking}
+          contactSettings={contactSettings}
+          bookingSettings={bookingSettings}
+          formSettings={formSettings}
+        />
+      </Suspense>
     </div>
   );
 }

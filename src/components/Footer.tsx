@@ -58,13 +58,13 @@ export default function Footer({ siteSettings, contactSettings }: FooterProps) {
               className="flex items-center shrink-0 focus:outline-none group"
             >
               <div className="relative shrink-0 flex h-[48px] overflow-hidden max-w-[220px]">
-                <Image
-                  src="/images/full-logo.png"
-                  alt="SK Crown Convention Logo"
-                  width={800}
-                  height={250}
-                  className="object-contain h-full w-auto"
-                />
+                 <Image
+                   src="/images/full-logo.png"
+                   alt="SK Crown Convention Logo"
+                   width={800}
+                   height={250}
+                   className="object-contain h-full w-auto mix-blend-screen"
+                 />
               </div>
             </Link>
             <p className="text-xs text-muted-text font-sans font-light leading-relaxed max-w-xs">

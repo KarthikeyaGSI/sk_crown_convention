@@ -85,7 +85,7 @@ export default function Navbar({ siteSettings, contactSettings, onOpenBooking }:
                 height={250}
                 priority
                 quality={100}
-                className="object-contain h-full w-auto"
+                className="object-contain h-full w-auto mix-blend-screen"
                 sizes="(max-width: 768px) 250px, (max-width: 1024px) 300px, 400px"
               />
             </div>
