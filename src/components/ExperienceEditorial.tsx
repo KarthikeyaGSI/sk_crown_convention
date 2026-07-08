@@ -18,7 +18,7 @@ export default function ExperienceEditorial({ homepage }: ExperienceEditorialPro
       label: "Featured Experience",
       title: feat?.title || "A Grand Welcoming Arrival",
       desc: feat?.description || "A breathtaking high-ceiling entrance welcoming your guests in absolute grandeur. Crafted to leave a lasting first impression of luxury, setting a majestic tone for your celebration.",
-      image: feat?.imageUrl || "/images/sk crown main.webp",
+      image: feat?.imageUrl || "/images/sk%20crown%20main.webp",
       imageAlt: "SK Crown Convention Hall Luxury Wedding Venue",
       align: "left",
       bullets: feat?.bulletPoints || [],
