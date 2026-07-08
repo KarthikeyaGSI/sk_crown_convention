@@ -91,7 +91,6 @@ export default function Hero({ heroSlides, homepage, onOpenBooking }: HeroProps)
           loop
           playsInline
           preload="metadata"
-          poster="/images/sk%20crown%20main.webp"
           onLoadedData={() => {
             if (typeof window !== "undefined") {
               window.dispatchEvent(new Event("heroVideoReady"));
